@@ -395,6 +395,7 @@
                 {
                     for(optArr of opt)
                     {
+                        var resDataArr = new Array();
                         var searchData = {
                             "request[firstCategory]":"200000",
                             "request[secondCategory]":String(itemType),
@@ -414,20 +415,46 @@
                             searchData["request[etcOptionList][" + etcIdx + "][secondOption]"] = String(item);
                             etcIdx++;
                         }
-                        
-                        $.ajax({
-                            url:"/SearchAuctionItems",
-                            type:"POST",
-                            datatype:"json",
-                            data:searchData,
-                            success:function(data){
-                                
-                                
-                            }
-                        });
+                        getAuctionData(resDataArr, itemType, searchData);
                     }
                 }
             }
+
+            function getAuctionData(resArr, dataType, searchObj, page) {
+                if (page == null) {
+                    page = 1;
+                }
+                searchObj["request[pageNo]"] = String(page);
+                $.ajax({
+                    url: "/SearchAuctionItems",
+                    type: "POST",
+                    datatype: "json",
+                    data: searchObj,
+                    success: function (data) {
+                        try{
+                            var resDataJson = JSON.parse(data);
+                            if(resDataJson.length <= 0)
+                            {
+                                debugger
+                                return;
+                            }
+                            else{
+                                for(item of resDataJson)
+                                {
+                                    resArr.push(item);
+                                }
+                                page++;
+                                getAuctionData(resArr, dataType, searchObj, page);
+                            }
+                        }
+                        catch(ex)
+                        {
+                            return;
+                        }
+                    }
+                });
+            }
+
 
             function getCombinations(arr, selectNumber) {
                 const results = [];

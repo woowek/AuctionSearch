@@ -81,7 +81,8 @@ public class GetAuctionDataController {
 		reqData.put("request[firstCategory]", (String)param.get("request[firstCategory]"));
 		reqData.put("request[secondCategory]", (String)param.get("request[secondCategory]"));
 		reqData.put("request[itemTier]", (String)param.get("request[itemTier]"));
-		reqData.put("request[itemGrade]", (String)param.get("request[itemGrade]"));		
+		reqData.put("request[itemGrade]", (String)param.get("request[itemGrade]"));
+		reqData.put("request[pageNo]", (String)param.get("request[pageNo]"));		
 		for(Integer i = 0; i < 4; i++)
 		{
 			if((String)param.get("request[etcOptionList][" + i.toString() + "][firstOption]")!=null)
@@ -92,48 +93,52 @@ public class GetAuctionDataController {
 		}
 		
 		//페이지 넘어가며 반환 데이터 크롤링
-		int itemsCnt = 10;
 		JSONArray jArr = new JSONArray();
-		Integer pageNum = 1;
-		while(itemsCnt > 0) {
-			itemsCnt = 0;
-			reqData.put("request[pageNo]", pageNum.toString());	
-			//System.out.println(reqData.toString());
-			Document doc = Jsoup.connect(reqUrl).data(reqData).post();		
-			Elements element = doc.select("div.grade");
-			Elements items = element.select("span.slot");
-			for (Element el : items) {
-				//항목별 정보
-				//Element_000 : 아이템명
-				//Element_001 : 아이템정보
-				//Element_002 : ?
-				//Element_003 : 거래회수
-				//Element_004 : 거래가능유무
-				//Element_005 : 착용정보
-				//Element_006 : 기본효과
-				//Element_007 : 특성
-				//Element_008 : 보석정보텍스트
-				//Element_009 : 보석정보상세
-				//Element_010 : 각인
-				//Element_011 : 품질업그레이드
-				//Element_012 : 획득정보
-				JSONParser parser = new JSONParser();
-				Object obj = parser.parse(el.attr("data-item").replace("&quot;", "\""));
-				JSONObject jsonObj = (JSONObject) obj;
-				jsonObj.remove("Element_002");
-				jsonObj.remove("Element_004");
-				jsonObj.remove("Element_005");
-				jsonObj.remove("Element_006");
-				jsonObj.remove("Element_008");
-				jsonObj.remove("Element_009");
-				jsonObj.remove("Element_011");
-				jsonObj.remove("Element_012");
-				jArr.add(jsonObj);
-				itemsCnt++;
-			}
-			pageNum++;
+		Document doc = Jsoup.connect(reqUrl).data(reqData).post();		
+		Elements element = doc.select("div.grade");
+		Elements items = element.select("span.slot");
+
+		//<td>
+		//	<div class="price-row">
+		//		<em data-grade="0">1</em><span class="tooltip">현재 최고가 <em data-grade="0">0</em></span>
+		//	</div>
+		//</td>
+		//<td>
+		//	<div class="price-buy">
+		//			<em data-grade="0">
+		//				1,000
+		//			</em>
+		//	</div>
+		//</td>
+
+		for (Element el : items) {
+			//항목별 정보
+			//Element_000 : 아이템명
+			//Element_001 : 아이템정보
+			//Element_002 : ?
+			//Element_003 : 거래회수
+			//Element_004 : 거래가능유무
+			//Element_005 : 착용정보
+			//Element_006 : 기본효과
+			//Element_007 : 특성
+			//Element_008 : 보석정보텍스트
+			//Element_009 : 보석정보상세
+			//Element_010 : 각인
+			//Element_011 : 품질업그레이드
+			//Element_012 : 획득정보
+			JSONParser parser = new JSONParser();
+			Object obj = parser.parse(el.attr("data-item").replace("&quot;", "\""));
+			JSONObject jsonObj = (JSONObject) obj;
+			jsonObj.remove("Element_002");
+			jsonObj.remove("Element_004");
+			jsonObj.remove("Element_005");
+			jsonObj.remove("Element_006");
+			jsonObj.remove("Element_008");
+			jsonObj.remove("Element_009");
+			jsonObj.remove("Element_011");
+			jsonObj.remove("Element_012");
+			jArr.add(jsonObj);
 		}
-		System.out.println(jArr.toString());
 
 		response.setContentType("text/html; charset=UTF-8");
     	PrintWriter out = response.getWriter();

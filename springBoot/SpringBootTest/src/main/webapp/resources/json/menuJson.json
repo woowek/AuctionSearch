@@ -1000,6 +1000,10 @@
             "text": "바드"
         },
         {
+            "value": 205,
+            "text": "소서리스"
+        },
+        {
             "value": 302,
             "text": "배틀마스터"
         },
@@ -4224,6 +4228,59 @@
                 ]
             },
             {
+                "value": 37310,
+                "class": 205,
+                "text": "돌풍",
+                "isSkillGroup": false,
+                "marketMenuSkillTripodList": [
+                    {
+                        "value": 1,
+                        "text": "정신 강화",
+                        "isGem": false
+                    },
+                    {
+                        "value": 2,
+                        "text": "빠른 준비",
+                        "isGem": false
+                    },
+                    {
+                        "value": 3,
+                        "text": "날렵한 시전",
+                        "isGem": false
+                    },
+                    {
+                        "value": 4,
+                        "text": "화염 회오리",
+                        "isGem": false
+                    },
+                    {
+                        "value": 5,
+                        "text": "냉기 회오리",
+                        "isGem": false
+                    },
+                    {
+                        "value": 6,
+                        "text": "번개 회오리",
+                        "isGem": false
+                    },
+                    {
+                        "value": 8,
+                        "text": "싹쓸바람",
+                        "isGem": false
+                    },
+                    {
+                        "value": 500,
+                        "text": "스킬 공격력 증가",
+                        "isGem": true
+                    },
+                    {
+                        "value": 2700,
+                        "text": "스킬 쿨타임 감소",
+                        "isGem": true
+                    }
+                ]
+            },
+            {
                 "value": 18110,
                 "class": 103,
                 "text": "드레드노트",
@@ -4439,6 +4496,87 @@
                     {
                         "value": 8,
                         "text": "죽음의 손아귀",
+                        "isGem": false
+                    },
+                    {
+                        "value": 500,
+                        "text": "스킬 공격력 증가",
+                        "isGem": true
+                    },
+                    {
+                        "value": 2700,
+                        "text": "스킬 쿨타임 감소",
+                        "isGem": true
+                    }
+                ]
+            },
+            {
+                "value": 37210,
+                "class": 205,
+                "text": "라이트닝 볼텍스",
+                "isSkillGroup": false,
+                "marketMenuSkillTripodList": [
+                    {
+                        "value": 3,
+                        "text": "정신 강화",
+                        "isGem": false
+                    },
+                    {
+                        "value": 5,
+                        "text": "가벼운 발걸음",
+                        "isGem": false
+                    },
+                    {
+                        "value": 8,
+                        "text": "사나운 번개",
+                        "isGem": false
+                    },
+                    {
+                        "value": 500,
+                        "text": "스킬 공격력 증가",
+                        "isGem": true
+                    },
+                    {
+                        "value": 2700,
+                        "text": "스킬 쿨타임 감소",
+                        "isGem": true
+                    }
+                ]
+            },
+            {
+                "value": 37300,
+                "class": 205,
+                "text": "라이트닝 볼트",
+                "isSkillGroup": false,
+                "marketMenuSkillTripodList": [
+                    {
+                        "value": 1,
+                        "text": "마비",
+                        "isGem": false
+                    },
+                    {
+                        "value": 3,
+                        "text": "빠른 준비",
+                        "isGem": false
+                    },
+                    {
+                        "value": 4,
+                        "text": "강화된 일격",
+                        "isGem": false
+                    },
+                    {
+                        "value": 6,
+                        "text": "급소 타격",
+                        "isGem": false
+                    },
+                    {
+                        "value": 7,
+                        "text": "갈래 번개",
+                        "isGem": false
+                    },
+                    {
+                        "value": 8,
+                        "text": "전압 상승",
                         "isGem": false
                     },
                     {
@@ -4760,6 +4898,49 @@
                     {
                         "value": 8,
                         "text": "샷 집중",
+                        "isGem": false
+                    },
+                    {
+                        "value": 500,
+                        "text": "스킬 공격력 증가",
+                        "isGem": true
+                    },
+                    {
+                        "value": 2700,
+                        "text": "스킬 쿨타임 감소",
+                        "isGem": true
+                    }
+                ]
+            },
+            {
+                "value": 37280,
+                "class": 205,
+                "text": "리버스 그래비티",
+                "isSkillGroup": false,
+                "marketMenuSkillTripodList": [
+                    {
+                        "value": 1,
+                        "text": "빠른 준비",
+                        "isGem": false
+                    },
+                    {
+                        "value": 4,
+                        "text": "용암 지대",
+                        "isGem": false
+                    },
+                    {
+                        "value": 6,
+                        "text": "전격 지대",
+                        "isGem": false
+                    },
+                    {
+                        "value": 7,
+                        "text": "약점 포착",
+                        "isGem": false
+                    },
+                    {
+                        "value": 8,
+                        "text": "약육 강식",
                         "isGem": false
                     },
                     {
@@ -7208,6 +7389,54 @@
                 ]
             },
             {
+                "value": 37200,
+                "class": 205,
+                "text": "블레이즈",
+                "isSkillGroup": false,
+                "marketMenuSkillTripodList": [
+                    {
+                        "value": 1,
+                        "text": "발화",
+                        "isGem": false
+                    },
+                    {
+                        "value": 3,
+                        "text": "정신 강화",
+                        "isGem": false
+                    },
+                    {
+                        "value": 5,
+                        "text": "불꽃 확장",
+                        "isGem": false
+                    },
+                    {
+                        "value": 6,
+                        "text": "이글거리는 화염",
+                        "isGem": false
+                    },
+                    {
+                        "value": 7,
+                        "text": "약점 포착",
+                        "isGem": false
+                    },
+                    {
+                        "value": 8,
+                        "text": "꺼지지 않는 불꽃",
+                        "isGem": false
+                    },
+                    {
+                        "value": 500,
+                        "text": "스킬 공격력 증가",
+                        "isGem": true
+                    },
+                    {
+                        "value": 2700,
+                        "text": "스킬 쿨타임 감소",
+                        "isGem": true
+                    }
+                ]
+            },
+            {
                 "value": 25200,
                 "class": 402,
                 "text": "블리츠 러시",
@@ -8206,6 +8435,54 @@
                 ]
             },
             {
+                "value": 37220,
+                "class": 205,
+                "text": "서릿발",
+                "isSkillGroup": false,
+                "marketMenuSkillTripodList": [
+                    {
+                        "value": 1,
+                        "text": "오한",
+                        "isGem": false
+                    },
+                    {
+                        "value": 2,
+                        "text": "깨달음",
+                        "isGem": false
+                    },
+                    {
+                        "value": 3,
+                        "text": "날렵한 시전",
+                        "isGem": false
+                    },
+                    {
+                        "value": 4,
+                        "text": "강화된 일격",
+                        "isGem": false
+                    },
+                    {
+                        "value": 7,
+                        "text": "서리 파편",
+                        "isGem": false
+                    },
+                    {
+                        "value": 8,
+                        "text": "서리 지대",
+                        "isGem": false
+                    },
+                    {
+                        "value": 500,
+                        "text": "스킬 공격력 증가",
+                        "isGem": true
+                    },
+                    {
+                        "value": 2700,
+                        "text": "스킬 쿨타임 감소",
+                        "isGem": true
+                    }
+                ]
+            },
+            {
                 "value": 25040,
                 "class": 402,
                 "text": "서프라이즈 어택",
@@ -9057,6 +9334,59 @@
                     {
                         "value": 8,
                         "text": "매서운 움직임",
+                        "isGem": false
+                    },
+                    {
+                        "value": 500,
+                        "text": "스킬 공격력 증가",
+                        "isGem": true
+                    },
+                    {
+                        "value": 2700,
+                        "text": "스킬 쿨타임 감소",
+                        "isGem": true
+                    }
+                ]
+            },
+            {
+                "value": 37320,
+                "class": 205,
+                "text": "숭고한 해일",
+                "isSkillGroup": false,
+                "marketMenuSkillTripodList": [
+                    {
+                        "value": 1,
+                        "text": "정신 강화",
+                        "isGem": false
+                    },
+                    {
+                        "value": 2,
+                        "text": "빠른 준비",
+                        "isGem": false
+                    },
+                    {
+                        "value": 3,
+                        "text": "깨달음",
+                        "isGem": false
+                    },
+                    {
+                        "value": 5,
+                        "text": "추가 폭발",
+                        "isGem": false
+                    },
+                    {
+                        "value": 6,
+                        "text": "진화된 해일",
+                        "isGem": false
+                    },
+                    {
+                        "value": 7,
+                        "text": "약점 포착",
+                        "isGem": false
+                    },
+                    {
+                        "value": 8,
+                        "text": "붉은 해일",
                         "isGem": false
                     },
                     {
@@ -10785,6 +11115,54 @@
                 ]
             },
             {
+                "value": 37250,
+                "class": 205,
+                "text": "아이스 애로우",
+                "isSkillGroup": false,
+                "marketMenuSkillTripodList": [
+                    {
+                        "value": 1,
+                        "text": "오한",
+                        "isGem": false
+                    },
+                    {
+                        "value": 2,
+                        "text": "깨달음",
+                        "isGem": false
+                    },
+                    {
+                        "value": 3,
+                        "text": "빠른 준비",
+                        "isGem": false
+                    },
+                    {
+                        "value": 4,
+                        "text": "꿰뚫는 일격",
+                        "isGem": false
+                    },
+                    {
+                        "value": 7,
+                        "text": "얼음 송곳",
+                        "isGem": false
+                    },
+                    {
+                        "value": 8,
+                        "text": "서리 폭격",
+                        "isGem": false
+                    },
+                    {
+                        "value": 500,
+                        "text": "스킬 공격력 증가",
+                        "isGem": true
+                    },
+                    {
+                        "value": 2700,
+                        "text": "스킬 쿨타임 감소",
+                        "isGem": true
+                    }
+                ]
+            },
+            {
                 "value": 28040,
                 "class": 502,
                 "text": "아토믹 애로우",
@@ -11295,6 +11673,54 @@
                 ]
             },
             {
+                "value": 37240,
+                "class": 205,
+                "text": "에너지 방출",
+                "isSkillGroup": false,
+                "marketMenuSkillTripodList": [
+                    {
+                        "value": 1,
+                        "text": "날렵한 시전",
+                        "isGem": false
+                    },
+                    {
+                        "value": 4,
+                        "text": "응축된 화염",
+                        "isGem": false
+                    },
+                    {
+                        "value": 5,
+                        "text": "응축된 냉기",
+                        "isGem": false
+                    },
+                    {
+                        "value": 6,
+                        "text": "응축된 번개",
+                        "isGem": false
+                    },
+                    {
+                        "value": 7,
+                        "text": "에너지 폭격",
+                        "isGem": false
+                    },
+                    {
+                        "value": 8,
+                        "text": "에너지 난사",
+                        "isGem": false
+                    },
+                    {
+                        "value": 500,
+                        "text": "스킬 공격력 증가",
+                        "isGem": true
+                    },
+                    {
+                        "value": 2700,
+                        "text": "스킬 쿨타임 감소",
+                        "isGem": true
+                    }
+                ]
+            },
+            {
                 "value": 35210,
                 "class": 505,
                 "text": "에너지 버스터",
@@ -11366,6 +11792,92 @@
                     {
                         "value": 6,
                         "text": "빠른 준비",
+                        "isGem": false
+                    },
+                    {
+                        "value": 500,
+                        "text": "스킬 공격력 증가",
+                        "isGem": true
+                    },
+                    {
+                        "value": 2700,
+                        "text": "스킬 쿨타임 감소",
+                        "isGem": true
+                    }
+                ]
+            },
+            {
+                "value": 37290,
+                "class": 205,
+                "text": "엘레기안의 손길",
+                "isSkillGroup": false,
+                "marketMenuSkillTripodList": [
+                    {
+                        "value": 2,
+                        "text": "파도의 분노",
+                        "isGem": false
+                    },
+                    {
+                        "value": 3,
+                        "text": "빠른 준비",
+                        "isGem": false
+                    },
+                    {
+                        "value": 4,
+                        "text": "재빠른 발놀림",
+                        "isGem": false
+                    },
+                    {
+                        "value": 500,
+                        "text": "스킬 공격력 증가",
+                        "isGem": true
+                    },
+                    {
+                        "value": 2700,
+                        "text": "스킬 쿨타임 감소",
+                        "isGem": true
+                    }
+                ]
+            },
+            {
+                "value": 37260,
+                "class": 205,
+                "text": "엘리멘탈 리액트",
+                "isSkillGroup": false,
+                "marketMenuSkillTripodList": [
+                    {
+                        "value": 1,
+                        "text": "통찰력",
+                        "isGem": false
+                    },
+                    {
+                        "value": 3,
+                        "text": "빠른 준비",
+                        "isGem": false
+                    },
+                    {
+                        "value": 4,
+                        "text": "강화된 일격",
+                        "isGem": false
+                    },
+                    {
+                        "value": 5,
+                        "text": "약육 강식",
+                        "isGem": false
+                    },
+                    {
+                        "value": 6,
+                        "text": "최후의 일격",
+                        "isGem": false
+                    },
+                    {
+                        "value": 7,
+                        "text": "안정된 크리스탈",
+                        "isGem": false
+                    },
+                    {
+                        "value": 8,
+                        "text": "충격파",
                         "isGem": false
                     },
                     {
@@ -13288,6 +13800,59 @@
                 ]
             },
             {
+                "value": 37330,
+                "class": 205,
+                "text": "익스플로전",
+                "isSkillGroup": false,
+                "marketMenuSkillTripodList": [
+                    {
+                        "value": 1,
+                        "text": "발화",
+                        "isGem": false
+                    },
+                    {
+                        "value": 2,
+                        "text": "정신 강화",
+                        "isGem": false
+                    },
+                    {
+                        "value": 3,
+                        "text": "약육강식",
+                        "isGem": false
+                    },
+                    {
+                        "value": 5,
+                        "text": "소용돌이 화염",
+                        "isGem": false
+                    },
+                    {
+                        "value": 6,
+                        "text": "약점 포착",
+                        "isGem": false
+                    },
+                    {
+                        "value": 7,
+                        "text": "마력 증폭",
+                        "isGem": false
+                    },
+                    {
+                        "value": 8,
+                        "text": "최후의 일격",
+                        "isGem": false
+                    },
+                    {
+                        "value": 500,
+                        "text": "스킬 공격력 증가",
+                        "isGem": true
+                    },
+                    {
+                        "value": 2700,
+                        "text": "스킬 쿨타임 감소",
+                        "isGem": true
+                    }
+                ]
+            },
+            {
                 "value": 18140,
                 "class": 103,
                 "text": "인듀어 페인",
@@ -13311,6 +13876,49 @@
                     {
                         "value": 7,
                         "text": "건강한 정신",
+                        "isGem": false
+                    },
+                    {
+                        "value": 500,
+                        "text": "스킬 공격력 증가",
+                        "isGem": true
+                    },
+                    {
+                        "value": 2700,
+                        "text": "스킬 쿨타임 감소",
+                        "isGem": true
+                    }
+                ]
+            },
+            {
+                "value": 37230,
+                "class": 205,
+                "text": "인페르노",
+                "isSkillGroup": false,
+                "marketMenuSkillTripodList": [
+                    {
+                        "value": 1,
+                        "text": "발화",
+                        "isGem": false
+                    },
+                    {
+                        "value": 4,
+                        "text": "화염 지대",
+                        "isGem": false
+                    },
+                    {
+                        "value": 5,
+                        "text": "약점 포착",
+                        "isGem": false
+                    },
+                    {
+                        "value": 7,
+                        "text": "화력 팽창",
+                        "isGem": false
+                    },
+                    {
+                        "value": 8,
+                        "text": "화력 보충",
                         "isGem": false
                     },
                     {
@@ -14382,6 +14990,64 @@
                 ]
             },
             {
+                "value": 37350,
+                "class": 205,
+                "text": "종말의 날",
+                "isSkillGroup": false,
+                "marketMenuSkillTripodList": [
+                    {
+                        "value": 1,
+                        "text": "발화",
+                        "isGem": false
+                    },
+                    {
+                        "value": 2,
+                        "text": "정신 강화",
+                        "isGem": false
+                    },
+                    {
+                        "value": 3,
+                        "text": "통찰력",
+                        "isGem": false
+                    },
+                    {
+                        "value": 4,
+                        "text": "화염 지대",
+                        "isGem": false
+                    },
+                    {
+                        "value": 5,
+                        "text": "소행성",
+                        "isGem": false
+                    },
+                    {
+                        "value": 6,
+                        "text": "과열된 운석",
+                        "isGem": false
+                    },
+                    {
+                        "value": 7,
+                        "text": "마력 증폭",
+                        "isGem": false
+                    },
+                    {
+                        "value": 8,
+                        "text": "최후의 일격",
+                        "isGem": false
+                    },
+                    {
+                        "value": 500,
+                        "text": "스킬 공격력 증가",
+                        "isGem": true
+                    },
+                    {
+                        "value": 2700,
+                        "text": "스킬 쿨타임 감소",
+                        "isGem": true
+                    }
+                ]
+            },
+            {
                 "value": 29040,
                 "class": 503,
                 "text": "종말의 전조",
@@ -15087,6 +15753,59 @@
                     {
                         "value": 8,
                         "text": "도약 공격",
+                        "isGem": false
+                    },
+                    {
+                        "value": 500,
+                        "text": "스킬 공격력 증가",
+                        "isGem": true
+                    },
+                    {
+                        "value": 2700,
+                        "text": "스킬 쿨타임 감소",
+                        "isGem": true
+                    }
+                ]
+            },
+            {
+                "value": 37270,
+                "class": 205,
+                "text": "천벌",
+                "isSkillGroup": false,
+                "marketMenuSkillTripodList": [
+                    {
+                        "value": 1,
+                        "text": "마비",
+                        "isGem": false
+                    },
+                    {
+                        "value": 2,
+                        "text": "정신 강화",
+                        "isGem": false
+                    },
+                    {
+                        "value": 4,
+                        "text": "피할 수 없는 운명",
+                        "isGem": false
+                    },
+                    {
+                        "value": 5,
+                        "text": "방전",
+                        "isGem": false
+                    },
+                    {
+                        "value": 6,
+                        "text": "파멸",
+                        "isGem": false
+                    },
+                    {
+                        "value": 7,
+                        "text": "마력 증폭",
+                        "isGem": false
+                    },
+                    {
+                        "value": 8,
+                        "text": "최후의 일격",
                         "isGem": false
                     },
                     {
@@ -18010,6 +18729,64 @@
                 ]
             },
             {
+                "value": 37340,
+                "class": 205,
+                "text": "혹한의 부름",
+                "isSkillGroup": false,
+                "marketMenuSkillTripodList": [
+                    {
+                        "value": 1,
+                        "text": "오한",
+                        "isGem": false
+                    },
+                    {
+                        "value": 2,
+                        "text": "정신 강화",
+                        "isGem": false
+                    },
+                    {
+                        "value": 3,
+                        "text": "깨달음",
+                        "isGem": false
+                    },
+                    {
+                        "value": 4,
+                        "text": "지배력 강화",
+                        "isGem": false
+                    },
+                    {
+                        "value": 5,
+                        "text": "불완전한 지배",
+                        "isGem": false
+                    },
+                    {
+                        "value": 6,
+                        "text": "통찰력",
+                        "isGem": false
+                    },
+                    {
+                        "value": 7,
+                        "text": "강화된 일격",
+                        "isGem": false
+                    },
+                    {
+                        "value": 8,
+                        "text": "최후의 일격",
+                        "isGem": false
+                    },
+                    {
+                        "value": 500,
+                        "text": "스킬 공격력 증가",
+                        "isGem": true
+                    },
+                    {
+                        "value": 2700,
+                        "text": "스킬 쿨타임 감소",
+                        "isGem": true
+                    }
+                ]
+            },
+            {
                 "value": 30120,
                 "class": 504,
                 "text": "화염방사기",
@@ -19007,6 +19784,16 @@
                         "class": 204
                     },
                     {
+                        "value": 293,
+                        "text": "점화",
+                        "class": 205
+                    },
+                    {
+                        "value": 294,
+                        "text": "환류",
+                        "class": 205
+                    },
+                    {
                         "value": 196,
                         "text": "분노의 망치",
                         "class": 103
@@ -19167,4 +19954,3 @@
         ]
     }
 }
-     
