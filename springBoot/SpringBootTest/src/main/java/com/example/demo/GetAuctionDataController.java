@@ -23,12 +23,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.FileReader;
-import com.sun.org.slf4j.internal.Logger;
-import com.sun.org.slf4j.internal.LoggerFactory;
 
 @Controller
 public class GetAuctionDataController {
-    private static final Logger logger = LoggerFactory.getLogger(GetAuctionDataController.class);
     
 	//페이지 크롤링 테스트
 	@RequestMapping("/AuctionSearhView")

@@ -11,10 +11,6 @@ import com.sun.org.slf4j.internal.LoggerFactory;
 
 @Controller
 public class HomeController {
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-	
-	
-	
 	@RequestMapping("/")
 	public String goHome(Locale locale, Model model) {
 		return "auctionSearchMain";
