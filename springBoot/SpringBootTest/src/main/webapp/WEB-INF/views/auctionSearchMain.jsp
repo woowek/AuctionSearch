@@ -365,6 +365,8 @@
                 else{
                     optCombData = getCombinations(searchOptData, 2);
                 }
+
+                $("#auctionList").html("");
                 searchMaecketItem("200010", engvCombData, optCombData);
                 
                 //귀걸이
@@ -435,7 +437,7 @@
                             var resDataJson = JSON.parse(data);
                             if(resDataJson.length <= 0)
                             {
-                                debugger
+                                makeAuctionResult(dataType, resArr);
                                 return;
                             }
                             else{
@@ -453,6 +455,96 @@
                         }
                     }
                 });
+            }
+            function makeAuctionResult(type, resArr)
+            {
+                var listID = "";
+                switch(type)
+                {
+                    case "200010":
+                        listID = "necklaceAuction";
+                        break;
+                    case "200020":
+                        listID = "earringAuction";
+                        break;
+                    case "200030":
+                        listID = "ringAuction";
+                        break;
+                    default:
+                        return;
+                        break;
+                }
+                /*
+0:
+Element_000: {type: "NameTagBox", value: "<P ALIGN='CENTER'><FONT COLOR='#FA5D00'>찬란한 구도자의 목걸이</FONT></P>"}
+Element_001: {type: "ItemTitle", value: {…}}
+Element_003: {type: "SingleTextBox", value: "<FONT SIZE='12'>귀속됨<BR>거래 <FONT COLOR='#FFD200'>3<…T COLOR='#C24B46'>거래 제한 아이템 레벨</FONT> 1415</FONT>"}
+Element_007: {type: "ItemPartBox", value: {…}}
+Element_010: {type: "ItemPartBox", value: {…}}
+buy_price: "-"
+row_price: "800"
+                */
+
+                var listDiv = document.createElement("div");
+                listDiv.id = listID;
+                listDiv.style.display = "inline-block";
+                for(item of resArr)
+                {
+
+                    var tableObj = document.createElement("table");
+                    tableObj.style.borderCollapse = "collapse";
+                    tableObj.style.border = "1px solid black";
+                    tableObj.style.fontSize = "10pt";
+                    var trObj = document.createElement("tr");
+                    var thObj = document.createElement("th");
+                    thObj.setAttribute("rowspan", "2");
+                    thObj.innerHTML = item.Element_000.value;
+                    trObj.appendChild(thObj);
+                    var thObj = document.createElement("th");
+                    thObj.innerHTML = "품질";
+                    trObj.appendChild(thObj);
+                    var thObj = document.createElement("th");
+                    thObj.innerHTML = "특성";
+                    trObj.appendChild(thObj);
+                    var thObj = document.createElement("th");
+                    thObj.innerHTML = "각인";
+                    trObj.appendChild(thObj);
+                    var thObj = document.createElement("th");
+                    thObj.innerHTML = "경매장 최소가";
+                    trObj.appendChild(thObj);
+                    var thObj = document.createElement("th");
+                    thObj.innerHTML = "즉시 구매가";
+                    trObj.appendChild(thObj);
+                    tableObj.appendChild(trObj);
+
+                    var trObj = document.createElement("tr");
+                    var tdObj = document.createElement("td");
+                    tdObj.innerHTML = item.Element_001.value.qualityValue;
+                    trObj.appendChild(tdObj);
+                    var tdObj = document.createElement("td");
+                    tdObj.innerHTML = item.Element_007.value.Element_001;
+                    trObj.appendChild(tdObj);
+                    var tdObj = document.createElement("td");
+                    tdObj.innerHTML =item.Element_010.value.Element_001;
+                    trObj.appendChild(tdObj);
+                    var tdObj = document.createElement("td");
+                    tdObj.innerHTML =item.row_price;
+                    trObj.appendChild(tdObj);
+                    var tdObj = document.createElement("td");
+                    tdObj.innerHTML =item.buy_price;
+                    trObj.appendChild(tdObj);
+                    tableObj.appendChild(trObj);
+                    listDiv.appendChild(tableObj);
+                }
+                $("#auctionList").append(listDiv);
+
+
+
+
+
+
+
+
             }
 
 
@@ -1121,8 +1213,7 @@
                 <div id="goalNeeds"></div>
             </div>
         </div>
-        <div>
-
+        <div id="auctionList">
         </div>
     </body>
 
