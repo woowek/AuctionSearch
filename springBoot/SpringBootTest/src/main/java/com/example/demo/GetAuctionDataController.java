@@ -94,51 +94,46 @@ public class GetAuctionDataController {
 		
 		//페이지 넘어가며 반환 데이터 크롤링
 		JSONArray jArr = new JSONArray();
-		Document doc = Jsoup.connect(reqUrl).data(reqData).post();		
-		Elements element = doc.select("div.grade");
-		Elements items = element.select("span.slot");
-
-		//<td>
-		//	<div class="price-row">
-		//		<em data-grade="0">1</em><span class="tooltip">현재 최고가 <em data-grade="0">0</em></span>
-		//	</div>
-		//</td>
-		//<td>
-		//	<div class="price-buy">
-		//			<em data-grade="0">
-		//				1,000
-		//			</em>
-		//	</div>
-		//</td>
-
-		for (Element el : items) {
-			//항목별 정보
-			//Element_000 : 아이템명
-			//Element_001 : 아이템정보
-			//Element_002 : ?
-			//Element_003 : 거래회수
-			//Element_004 : 거래가능유무
-			//Element_005 : 착용정보
-			//Element_006 : 기본효과
-			//Element_007 : 특성
-			//Element_008 : 보석정보텍스트
-			//Element_009 : 보석정보상세
-			//Element_010 : 각인
-			//Element_011 : 품질업그레이드
-			//Element_012 : 획득정보
-			JSONParser parser = new JSONParser();
-			Object obj = parser.parse(el.attr("data-item").replace("&quot;", "\""));
-			JSONObject jsonObj = (JSONObject) obj;
-			jsonObj.remove("Element_002");
-			jsonObj.remove("Element_004");
-			jsonObj.remove("Element_005");
-			jsonObj.remove("Element_006");
-			jsonObj.remove("Element_008");
-			jsonObj.remove("Element_009");
-			jsonObj.remove("Element_011");
-			jsonObj.remove("Element_012");
-			jArr.add(jsonObj);
+		Document doc = Jsoup.connect(reqUrl).data(reqData).post();
+		Elements trs = doc.select("tr");
+		for (Element tr : trs) {
+			Elements grades = tr.select("div.grade");
+			if(grades.size() > 0)
+			{
+				Element item = grades.get(0).select("span.slot").get(0);
+				Element row_price = tr.select("div.price-row em").get(0);
+				Element buy_price = tr.select("div.price-buy em").get(0);
+				//항목별 정보
+				//Element_000 : 아이템명
+				//Element_001 : 아이템정보
+				//Element_002 : ?
+				//Element_003 : 거래회수
+				//Element_004 : 거래가능유무
+				//Element_005 : 착용정보
+				//Element_006 : 기본효과
+				//Element_007 : 특성
+				//Element_008 : 보석정보텍스트
+				//Element_009 : 보석정보상세
+				//Element_010 : 각인
+				//Element_011 : 품질업그레이드
+				//Element_012 : 획득정보
+				JSONParser parser = new JSONParser();
+				Object obj = parser.parse(item.attr("data-item").replace("&quot;", "\""));
+				JSONObject jsonObj = (JSONObject) obj;
+				jsonObj.remove("Element_002");
+				jsonObj.remove("Element_004");
+				jsonObj.remove("Element_005");
+				jsonObj.remove("Element_006");
+				jsonObj.remove("Element_008");
+				jsonObj.remove("Element_009");
+				jsonObj.remove("Element_011");
+				jsonObj.remove("Element_012");
+				jsonObj.put("row_price", row_price.html());
+				jsonObj.put("buy_price", buy_price.html());
+				jArr.add(jsonObj);
+			}
 		}
+
 
 		response.setContentType("text/html; charset=UTF-8");
     	PrintWriter out = response.getWriter();
