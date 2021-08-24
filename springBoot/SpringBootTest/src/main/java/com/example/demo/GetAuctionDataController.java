@@ -2,8 +2,10 @@ package com.example.demo;
 import java.io.FileInputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -120,17 +122,34 @@ public class GetAuctionDataController {
 				JSONParser parser = new JSONParser();
 				Object obj = parser.parse(item.attr("data-item").replace("&quot;", "\""));
 				JSONObject jsonObj = (JSONObject) obj;
-				jsonObj.remove("Element_002");
-				jsonObj.remove("Element_004");
-				jsonObj.remove("Element_005");
-				jsonObj.remove("Element_006");
-				jsonObj.remove("Element_008");
-				jsonObj.remove("Element_009");
-				jsonObj.remove("Element_011");
-				jsonObj.remove("Element_012");
-				jsonObj.put("row_price", row_price.html());
-				jsonObj.put("buy_price", buy_price.html());
-				jArr.add(jsonObj);
+				//필요정보
+				//이름
+				//품질
+				//각인
+				//특성
+				//최저가
+				//즉구가
+				JSONObject rtnObj = new JSONObject();
+				rtnObj.put("name", removeTag((String)((JSONObject)jsonObj.get("Element_000")).get("value")));
+				rtnObj.put("quality", ((JSONObject)((JSONObject)jsonObj.get("Element_001")).get("value")).get("qualityValue"));
+
+				List<String> rtnObjArr = new ArrayList<String>();
+				for(String val : ((String)((JSONObject)((JSONObject)jsonObj.get("Element_007")).get("value")).get("Element_001")).split("<BR>"))
+				{
+					rtnObjArr.add(removeTag(val));
+				}
+				rtnObj.put("engraving", rtnObjArr);
+
+				rtnObjArr = new ArrayList<String>();
+				for(String val : ((String)((JSONObject)((JSONObject)jsonObj.get("Element_010")).get("value")).get("Element_001")).split("<BR>"))
+				{
+					rtnObjArr.add(removeTag(val));
+				}
+				rtnObj.put("option", rtnObjArr);
+
+				rtnObj.put("rowprice", row_price.html());
+				rtnObj.put("buyprice", buy_price.html());
+				jArr.add(rtnObj);
 			}
 		}
 
@@ -139,5 +158,8 @@ public class GetAuctionDataController {
     	PrintWriter out = response.getWriter();
     	out.print(jArr.toString());
 	}
-	
+
+	public static String removeTag(String html) throws Exception {
+		return html.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+	}
 }

@@ -33,6 +33,10 @@
             var searchEngvData = new Array();
             var searchOptData = new Array();
 
+            //결과 데이터
+            var auctionResultNecklace;
+            var auctionResultEarring;
+            var auctionResultRing;
 
             $( document ).ready(function() {
                 getMarketData();
@@ -463,34 +467,46 @@
                 {
                     case "200010":
                         listID = "necklaceAuction";
+                        auctionResultNecklace = null;
+
                         break;
                     case "200020":
                         listID = "earringAuction";
+                        auctionResultEarring = null;
+
                         break;
                     case "200030":
                         listID = "ringAuction";
+                        auctionResultRing = null;
+
                         break;
                     default:
                         return;
                         break;
                 }
-                /*
-0:
-Element_000: {type: "NameTagBox", value: "<P ALIGN='CENTER'><FONT COLOR='#FA5D00'>찬란한 구도자의 목걸이</FONT></P>"}
-Element_001: {type: "ItemTitle", value: {…}}
-Element_003: {type: "SingleTextBox", value: "<FONT SIZE='12'>귀속됨<BR>거래 <FONT COLOR='#FFD200'>3<…T COLOR='#C24B46'>거래 제한 아이템 레벨</FONT> 1415</FONT>"}
-Element_007: {type: "ItemPartBox", value: {…}}
-Element_010: {type: "ItemPartBox", value: {…}}
-buy_price: "-"
-row_price: "800"
-                */
+/*
+    {
+        "engraving": {
+            "0": "치명 +426",
+            "1": "신속 +422"
+        },
+        "rowprice": "2,500",
+        "buyprice": "2,500",
+        "name": "찬란한 구도자의 목걸이",
+        "quality": 24,
+        "option": {
+            "0": "[슈퍼 차지] 활성도 +3",
+            "1": "[원한] 활성도 +3",
+            "2": "[이동속도 감소] 활성도 +1"
+        }
+    }
+*/
 
                 var listDiv = document.createElement("div");
                 listDiv.id = listID;
                 listDiv.style.display = "inline-block";
                 for(item of resArr)
                 {
-
                     var tableObj = document.createElement("table");
                     tableObj.style.borderCollapse = "collapse";
                     tableObj.style.border = "1px solid black";
@@ -498,7 +514,7 @@ row_price: "800"
                     var trObj = document.createElement("tr");
                     var thObj = document.createElement("th");
                     thObj.setAttribute("rowspan", "2");
-                    thObj.innerHTML = item.Element_000.value;
+                    thObj.innerHTML = item.name;
                     trObj.appendChild(thObj);
                     var thObj = document.createElement("th");
                     thObj.innerHTML = "품질";
@@ -516,35 +532,41 @@ row_price: "800"
                     thObj.innerHTML = "즉시 구매가";
                     trObj.appendChild(thObj);
                     tableObj.appendChild(trObj);
-
+                    
                     var trObj = document.createElement("tr");
                     var tdObj = document.createElement("td");
-                    tdObj.innerHTML = item.Element_001.value.qualityValue;
+                    tdObj.innerHTML = item.quality;
                     trObj.appendChild(tdObj);
                     var tdObj = document.createElement("td");
-                    tdObj.innerHTML = item.Element_007.value.Element_001;
+                    for(el of item.engraving)
+                    {
+                        if(tdObj.innerHTML != "")
+                        {
+                            tdObj.innerHTML += "<br>";
+                        }
+                        tdObj.innerHTML += el;
+                    }
                     trObj.appendChild(tdObj);
                     var tdObj = document.createElement("td");
-                    tdObj.innerHTML =item.Element_010.value.Element_001;
+                    for(el of item.option)
+                    {
+                        if(tdObj.innerHTML != "")
+                        {
+                            tdObj.innerHTML += "<br>";
+                        }
+                        tdObj.innerHTML += el;
+                    }
                     trObj.appendChild(tdObj);
                     var tdObj = document.createElement("td");
-                    tdObj.innerHTML =item.row_price;
+                    tdObj.innerHTML =item.rowprice;
                     trObj.appendChild(tdObj);
                     var tdObj = document.createElement("td");
-                    tdObj.innerHTML =item.buy_price;
+                    tdObj.innerHTML =item.buyprice;
                     trObj.appendChild(tdObj);
                     tableObj.appendChild(trObj);
                     listDiv.appendChild(tableObj);
                 }
                 $("#auctionList").append(listDiv);
-
-
-
-
-
-
-
-
             }
 
 
