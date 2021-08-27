@@ -96,7 +96,12 @@ public class GetAuctionDataController {
 		
 		//페이지 넘어가며 반환 데이터 크롤링
 		JSONArray jArr = new JSONArray();
-		Document doc = Jsoup.connect(reqUrl).data(reqData).post();
+		//SUAT = HD.PLD.SIGN(이걸 어떻게 뽑아....)
+		//OTP 인증 후 날라오는 SUAT 쿠키값이 필요합니다...
+		Document doc = Jsoup.connect(reqUrl)
+	            .cookie("SUAT", (String)param.get("suatCookie"))
+				.data(reqData).post();		
+		
 		Elements trs = doc.select("tr");
 		for (Element tr : trs) {
 			Elements grades = tr.select("div.grade");
@@ -114,11 +119,8 @@ public class GetAuctionDataController {
 				//Element_005 : 착용정보
 				//Element_006 : 기본효과
 				//Element_007 : 특성
-				//Element_008 : 보석정보텍스트
-				//Element_009 : 보석정보상세
-				//Element_010 : 각인
-				//Element_011 : 품질업그레이드
-				//Element_012 : 획득정보
+				//Element_008 : 각인
+				//Element_009 : 품질업그레이드
 				JSONParser parser = new JSONParser();
 				Object obj = parser.parse(item.attr("data-item").replace("&quot;", "\""));
 				JSONObject jsonObj = (JSONObject) obj;
@@ -139,11 +141,22 @@ public class GetAuctionDataController {
 					rtnObjArr.add(removeTag(val));
 				}
 				rtnObj.put("engraving", rtnObjArr);
-
-				rtnObjArr = new ArrayList<String>();
-				for(String val : ((String)((JSONObject)((JSONObject)jsonObj.get("Element_010")).get("value")).get("Element_001")).split("<BR>"))
+				
+				if(((JSONObject)jsonObj.get("Element_008")).get("type").equals("SingleTextBox"))
 				{
-					rtnObjArr.add(removeTag(val));
+					rtnObjArr = new ArrayList<String>();
+					for(String val : ((String)((JSONObject)((JSONObject)jsonObj.get("Element_010")).get("value")).get("Element_001")).split("<BR>"))
+					{
+						rtnObjArr.add(removeTag(val));
+					}					
+				}
+				else
+				{
+					rtnObjArr = new ArrayList<String>();
+					for(String val : ((String)((JSONObject)((JSONObject)jsonObj.get("Element_008")).get("value")).get("Element_001")).split("<BR>"))
+					{
+						rtnObjArr.add(removeTag(val));
+					}
 				}
 				rtnObj.put("option", rtnObjArr);
 

@@ -421,6 +421,7 @@
                             searchData["request[etcOptionList][" + etcIdx + "][secondOption]"] = String(item);
                             etcIdx++;
                         }
+                        searchData["suatCookie"] = $("#suatCookie").val();
                         getAuctionData(resDataArr, itemType, searchData);
                     }
                 }
@@ -590,6 +591,9 @@
     </head>
 
     <body>
+        <!-- 가져와야하는 쿠키값 이건 어떻게 쓰라하냐...-->
+        <!-- document.cookie.substr(document.cookie.indexOf("SUAT=") + 5).split(";")[0] -->
+        <div>쿠키 : <input type="text" id="suatCookie"/></div>
         <div>장비 상태</div>
         <div>
             <span>클래스</span>
