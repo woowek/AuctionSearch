@@ -84,7 +84,9 @@ public class GetAuctionDataController {
 		reqData.put("request[secondCategory]", (String)param.get("request[secondCategory]"));
 		reqData.put("request[itemTier]", (String)param.get("request[itemTier]"));
 		reqData.put("request[itemGrade]", (String)param.get("request[itemGrade]"));
-		reqData.put("request[pageNo]", (String)param.get("request[pageNo]"));		
+		reqData.put("request[pageNo]", (String)param.get("request[pageNo]"));
+		reqData.put("request[sortOption][Sort]", (String)param.get("request[sortOption][Sort]"));
+		reqData.put("request[sortOption][IsDesc]", (String)param.get("request[sortOption][IsDesc]"));
 		for(Integer i = 0; i < 4; i++)
 		{
 			if((String)param.get("request[etcOptionList][" + i.toString() + "][firstOption]")!=null)
@@ -95,9 +97,8 @@ public class GetAuctionDataController {
 		}
 		
 		//페이지 넘어가며 반환 데이터 크롤링
+		//stove 로그인(suat) 쿠키값 필요하여 추가 파라미터 적용
 		JSONArray jArr = new JSONArray();
-		//SUAT = HD.PLD.SIGN(이걸 어떻게 뽑아....)
-		//OTP 인증 후 날라오는 SUAT 쿠키값이 필요합니다...
 		Document doc = Jsoup.connect(reqUrl)
 	            .cookie("SUAT", (String)param.get("suatCookie"))
 				.data(reqData).post();		

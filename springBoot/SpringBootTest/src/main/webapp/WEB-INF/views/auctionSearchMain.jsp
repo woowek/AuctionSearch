@@ -387,6 +387,10 @@
                 //itemTier : 3티어 고정(3)
                 //itemGrade : 유물 고정(5)
                 //gradeQuality : 품질(설정 안함)
+                //sortOption[Sort] : 정렬기준
+                //-> BUY_PRICE : 즉구가
+                //sortOption[IsDesc] : 역순 여부
+                //-> true/false
                 //etcOptionList : 각인, 특성(request[etcOptionList][0][firstOption] 의 형태)
                 //-> firstOption : 각인(3)
                 //-> secondOption: 각인 옵션값
@@ -406,7 +410,9 @@
                             "request[firstCategory]":"200000",
                             "request[secondCategory]":String(itemType),
                             "request[itemTier]":"3",
-                            "request[itemGrade]":"5"
+                            "request[itemGrade]":"5",
+                            "request[sortOption][Sort]":"BUY_PRICE",//즉구가 정렬 기준
+                            "request[sortOption][IsDesc]":"false"//즉구가 정렬 기준
                         };
                         var etcIdx = 0;
                         for(item of engvArr)
@@ -464,20 +470,24 @@
             function makeAuctionResult(type, resArr)
             {
                 var listID = "";
+                var listName = "";
                 switch(type)
                 {
                     case "200010":
                         listID = "necklaceAuction";
+                        listName = "목걸이";
                         auctionResultNecklace = null;
 
                         break;
                     case "200020":
                         listID = "earringAuction";
+                        listName = "귀걸이";
                         auctionResultEarring = null;
 
                         break;
                     case "200030":
                         listID = "ringAuction";
+                        listName = "반지";
                         auctionResultRing = null;
 
                         break;
@@ -506,13 +516,42 @@
                 var listDiv = document.createElement("div");
                 listDiv.id = listID;
                 listDiv.style.display = "inline-block";
+                listDiv.style.width = "calc(100% / 3)";
+                listDiv.style.height = "600px";
+                listDiv.style.overflow = "scroll";
+                listDiv.innerHTML = listName;
+                
+                var tableObj = document.createElement("table");
+                tableObj.style.borderCollapse = "collapse";
+                tableObj.style.fontSize = "10pt";
+                tableObj.style.tableLayout = "fixed";
+                
+                var colgroupObj = document.createElement("colgroup");
+                var colObj = document.createElement("colObj");
+                colObj.style.width = "130px";
+                colgroupObj.appendChild(colObj);
+                var colObj = document.createElement("colObj");
+                colObj.style.width = "40px";
+                colgroupObj.appendChild(colObj);
+                var colObj = document.createElement("colObj");
+                colObj.style.width = "200px";
+                colgroupObj.appendChild(colObj);
+                var colObj = document.createElement("colObj");
+                colObj.style.width = "300px";
+                colgroupObj.appendChild(colObj);
+                var colObj = document.createElement("colObj");
+                colObj.style.width = "200px";
+                colgroupObj.appendChild(colObj);
+                var colObj = document.createElement("colObj");
+                colObj.style.width = "200px";
+                colgroupObj.appendChild(colObj);
+                tableObj.appendChild(colgroupObj);
+
                 for(item of resArr)
                 {
-                    var tableObj = document.createElement("table");
-                    tableObj.style.borderCollapse = "collapse";
-                    tableObj.style.border = "1px solid black";
-                    tableObj.style.fontSize = "10pt";
                     var trObj = document.createElement("tr");
+                    trObj.style.borderTop = "1px solid black";
+                    trObj.style.borderBottom = "1px solid black";
                     var thObj = document.createElement("th");
                     thObj.setAttribute("rowspan", "2");
                     thObj.innerHTML = item.name;
@@ -527,10 +566,10 @@
                     thObj.innerHTML = "각인";
                     trObj.appendChild(thObj);
                     var thObj = document.createElement("th");
-                    thObj.innerHTML = "경매장 최소가";
+                    thObj.innerHTML = "최소가";
                     trObj.appendChild(thObj);
                     var thObj = document.createElement("th");
-                    thObj.innerHTML = "즉시 구매가";
+                    thObj.innerHTML = "즉구가";
                     trObj.appendChild(thObj);
                     tableObj.appendChild(trObj);
                     
@@ -565,8 +604,8 @@
                     tdObj.innerHTML =item.buyprice;
                     trObj.appendChild(tdObj);
                     tableObj.appendChild(trObj);
-                    listDiv.appendChild(tableObj);
                 }
+                listDiv.appendChild(tableObj);
                 $("#auctionList").append(listDiv);
             }
 
@@ -591,9 +630,16 @@
     </head>
 
     <body>
-        <!-- 가져와야하는 쿠키값 이건 어떻게 쓰라하냐...-->
-        <!-- document.cookie.substr(document.cookie.indexOf("SUAT=") + 5).split(";")[0] -->
-        <div>쿠키 : <input type="text" id="suatCookie"/></div>
+        <div>쿠키 : <input type="text" id="suatCookie" style="width:300px;"/></div>
+        stove 로그인 후 디버깅 창에 아래 구문 실행 후 쿠키 확인
+        <div style="font-size:8pt;border:1px solid black;width:450px;margin-bottom: 20px;padding:10px;">
+            const t = document.createElement("textarea");<br/>
+            document.body.appendChild(t);<br/>
+            t.value = document.cookie.substr(document.cookie.indexOf("SUAT=") + 5).split(";")[0];<br/>
+            t.select();<br/>
+            document.execCommand("copy");<br/>
+            document.body.removeChild(t);
+        </div> 
         <div>장비 상태</div>
         <div>
             <span>클래스</span>
