@@ -39,8 +39,23 @@
             var auctionResultRing;
 
             $( document ).ready(function() {
+                var suatCookieVal = getCookie("suat");
+                if(suatCookieVal!= null && suatCookieVal != "")
+                {
+                    $("#suatCookie").val(suatCookieVal);
+                }
+
                 getMarketData();
             });
+
+            function getCookie(name) {
+                var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+                return value ? unescape(value[2]) : null;
+            }
+            function setCookie(name, value) {
+                var cookieText = escape(name) + '=' + escape(value);
+                document.cookie = cookieText;
+            }
 
             $(document).on("keypress", ".statusOptionDegree", function (event) {
                 if (event.key === '.' || event.key === '-' || event.key >= 0 && event.key <= 9) {
@@ -201,7 +216,6 @@
             function makeCurStatus(engMap, optMap, debuffMap)
             {
                 var tableObj = document.createElement("table");
-
                 var engvJson = marketJson.marketAuction.marketMenuAuctionEtcList[2].marketMenuEtcOptionSubList;
                 var num = 0;
                 for(item of engvJson)
@@ -348,6 +362,7 @@
 
             function searchMarket()
             {
+                setCookie("suat", $("#suatCookie").val());
                 //needEngv
                 //needOpt
                 //var engvJson = marketJson.marketAuction.marketMenuAuctionEtcList[2].marketMenuEtcOptionSubList;
@@ -369,38 +384,37 @@
                 else{
                     optCombData = getCombinations(searchOptData, 2);
                 }
-
-                $("#auctionList").html("");
-                searchMaecketItem("200010", engvCombData, optCombData);
-                
+                //목걸이
+                searchMaecketItem_necklace(engvCombData, optCombData);
                 //귀걸이
-
+                searchMaecketItem("200020", engvCombData, searchOptData);
                 //반지
-
+                searchMaecketItem("200030", engvCombData, searchOptData);
             }
 
-            function searchMaecketItem(itemType, engv, opt)
+            //각인정보와 특성정보로 검색 데이터를 구성
+            //firstCategory : 200000 고정
+            //secondCategory 검색은 목걸이(200010), 귀걸이(200020), 반지(200030)
+            //itemTier : 3티어 고정(3)
+            //itemGrade : 유물 고정(5)
+            //gradeQuality : 품질(설정 안함)
+            //sortOption[Sort] : 정렬기준
+            //-> BUY_PRICE : 즉구가
+            //sortOption[IsDesc] : 역순 여부
+            //-> true/false
+            //etcOptionList : 각인, 특성(request[etcOptionList][0][firstOption] 의 형태)
+            //-> firstOption : 각인(3)
+            //-> secondOption: 각인 옵션값
+            //-> minValue : 최소
+            //-> maxValue : 최대
+            //-------------------------------
+            //-> firstOption : 특성(2)
+            //-> secondOption : 특성 옵션값
+            //-> minValue: 최소
+            //-> maxValue : 최대
+            function searchMaecketItem_necklace(engv, opt)
             {
-                //각인정보와 특성정보로 검색 데이터를 구성
-                //firstCategory : 200000 고정
-                //secondCategory 검색은 목걸이(200010), 귀걸이(200020), 반지만(200030)
-                //itemTier : 3티어 고정(3)
-                //itemGrade : 유물 고정(5)
-                //gradeQuality : 품질(설정 안함)
-                //sortOption[Sort] : 정렬기준
-                //-> BUY_PRICE : 즉구가
-                //sortOption[IsDesc] : 역순 여부
-                //-> true/false
-                //etcOptionList : 각인, 특성(request[etcOptionList][0][firstOption] 의 형태)
-                //-> firstOption : 각인(3)
-                //-> secondOption: 각인 옵션값
-                //-> minValue : 최소
-                //-> maxValue : 최대
-                //-------------------------------
-                //-> firstOption : 특성(2)
-                //-> secondOption : 특성 옵션값
-                //-> minValue: 최소
-                //-> maxValue : 최대
+                $("#necklaceAuction").html("");
                 for(engvArr of engv)
                 {
                     for(optArr of opt)
@@ -408,7 +422,7 @@
                         var resDataArr = new Array();
                         var searchData = {
                             "request[firstCategory]":"200000",
-                            "request[secondCategory]":String(itemType),
+                            "request[secondCategory]":"200010",
                             "request[itemTier]":"3",
                             "request[itemGrade]":"5",
                             "request[sortOption][Sort]":"BUY_PRICE",//즉구가 정렬 기준
@@ -427,6 +441,52 @@
                             searchData["request[etcOptionList][" + etcIdx + "][secondOption]"] = String(item);
                             etcIdx++;
                         }
+                        searchData["suatCookie"] = $("#suatCookie").val();
+                        getAuctionData(resDataArr, "200010", searchData);
+                    }
+                }
+            }
+            function searchMaecketItem(itemType, engv, opt)
+            {                
+                switch(itemType)
+                {
+                    case "200010":
+                        listID = "necklaceAuction";
+                        break;
+                    case "200020":
+                        listID = "earringAuction";
+                        break;
+                    case "200030":
+                        listID = "ringAuction";
+                        break;
+                    default:
+                        return;
+                        break;
+                }
+                $("#" + listID ).html("");
+
+                for(engvArr of engv)
+                {
+                    for(optItem of opt)
+                    {
+                        var resDataArr = new Array();
+                        var searchData = {
+                            "request[firstCategory]":"200000",
+                            "request[secondCategory]":String(itemType),
+                            "request[itemTier]":"3",
+                            "request[itemGrade]":"5",
+                            "request[sortOption][Sort]":"BUY_PRICE",//즉구가 정렬 기준
+                            "request[sortOption][IsDesc]":"false"//즉구가 정렬 기준
+                        };
+                        var etcIdx = 0;
+                        for(item of engvArr)
+                        {
+                            searchData["request[etcOptionList][" + etcIdx + "][firstOption]"] = "3";
+                            searchData["request[etcOptionList][" + etcIdx + "][secondOption]"] = String(item);
+                            etcIdx++;
+                        }
+                        searchData["request[etcOptionList][" + etcIdx + "][firstOption]"] = "2";
+                        searchData["request[etcOptionList][" + etcIdx + "][secondOption]"] = String(optItem);
                         searchData["suatCookie"] = $("#suatCookie").val();
                         getAuctionData(resDataArr, itemType, searchData);
                     }
@@ -467,6 +527,25 @@
                     }
                 });
             }
+
+            
+            /*
+                {
+                    "engraving": {
+                        "0": "치명 +426",
+                        "1": "신속 +422"
+                    },
+                    "rowprice": "2,500",
+                    "buyprice": "2,500",
+                    "name": "찬란한 구도자의 목걸이",
+                    "quality": 24,
+                    "option": {
+                        "0": "[슈퍼 차지] 활성도 +3",
+                        "1": "[원한] 활성도 +3",
+                        "2": "[이동속도 감소] 활성도 +1"
+                    }
+                }
+            */
             function makeAuctionResult(type, resArr)
             {
                 var listID = "";
@@ -475,78 +554,20 @@
                 {
                     case "200010":
                         listID = "necklaceAuction";
-                        listName = "목걸이";
                         auctionResultNecklace = null;
-
                         break;
                     case "200020":
                         listID = "earringAuction";
-                        listName = "귀걸이";
                         auctionResultEarring = null;
-
                         break;
                     case "200030":
                         listID = "ringAuction";
-                        listName = "반지";
                         auctionResultRing = null;
-
                         break;
                     default:
                         return;
                         break;
                 }
-/*
-    {
-        "engraving": {
-            "0": "치명 +426",
-            "1": "신속 +422"
-        },
-        "rowprice": "2,500",
-        "buyprice": "2,500",
-        "name": "찬란한 구도자의 목걸이",
-        "quality": 24,
-        "option": {
-            "0": "[슈퍼 차지] 활성도 +3",
-            "1": "[원한] 활성도 +3",
-            "2": "[이동속도 감소] 활성도 +1"
-        }
-    }
-*/
-
-                var listDiv = document.createElement("div");
-                listDiv.id = listID;
-                listDiv.style.display = "inline-block";
-                listDiv.style.width = "calc(100% / 3)";
-                listDiv.style.height = "600px";
-                listDiv.style.overflow = "scroll";
-                listDiv.innerHTML = listName;
-                
-                var tableObj = document.createElement("table");
-                tableObj.style.borderCollapse = "collapse";
-                tableObj.style.fontSize = "10pt";
-                tableObj.style.tableLayout = "fixed";
-                
-                var colgroupObj = document.createElement("colgroup");
-                var colObj = document.createElement("colObj");
-                colObj.style.width = "130px";
-                colgroupObj.appendChild(colObj);
-                var colObj = document.createElement("colObj");
-                colObj.style.width = "40px";
-                colgroupObj.appendChild(colObj);
-                var colObj = document.createElement("colObj");
-                colObj.style.width = "200px";
-                colgroupObj.appendChild(colObj);
-                var colObj = document.createElement("colObj");
-                colObj.style.width = "300px";
-                colgroupObj.appendChild(colObj);
-                var colObj = document.createElement("colObj");
-                colObj.style.width = "200px";
-                colgroupObj.appendChild(colObj);
-                var colObj = document.createElement("colObj");
-                colObj.style.width = "200px";
-                colgroupObj.appendChild(colObj);
-                tableObj.appendChild(colgroupObj);
-
                 for(item of resArr)
                 {
                     var trObj = document.createElement("tr");
@@ -571,7 +592,7 @@
                     var thObj = document.createElement("th");
                     thObj.innerHTML = "즉구가";
                     trObj.appendChild(thObj);
-                    tableObj.appendChild(trObj);
+                    $("#" + listID ).append(trObj);
                     
                     var trObj = document.createElement("tr");
                     var tdObj = document.createElement("td");
@@ -603,10 +624,9 @@
                     var tdObj = document.createElement("td");
                     tdObj.innerHTML =item.buyprice;
                     trObj.appendChild(tdObj);
-                    tableObj.appendChild(trObj);
+                    $("#" + listID ).append(trObj);
+                    $("#" + listID + "Cnt").html($("#" + listID ).find("tr").length/2);
                 }
-                listDiv.appendChild(tableObj);
-                $("#auctionList").append(listDiv);
             }
 
 
@@ -1286,6 +1306,57 @@
             </div>
         </div>
         <div id="auctionList">
+            <div style="display: inline-block;width:calc(100% / 3 - 10px);height:600px;">
+                목걸이 : <span id="necklaceAuctionCnt"></span>
+                <div style="overflow-y: scroll;height:100%;">
+                    <table style="border-collapse: collapse; font-size: 8pt;table-layout: fixed;">
+                        <colgroup>
+                            <col style="width: 130px;"/>
+                            <col style="width: 40px;"/>
+                            <col style="width: 200px;"/>
+                            <col style="width: 300px;"/>
+                            <col style="width: 200px;"/>
+                            <col style="width: 200px;"/>
+                        </colgroup>
+                        <tbody id="necklaceAuction">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div style="display: inline-block;width:calc(100% / 3 - 10px);height:600px;">
+                귀걸이 : <span id="earringAuctionCnt"></span>
+                <div style="overflow-y: scroll;height:100%;">
+                    <table style="border-collapse: collapse; font-size: 8pt;table-layout: fixed;">
+                        <colgroup>
+                            <col style="width: 130px;"/>
+                            <col style="width: 40px;"/>
+                            <col style="width: 200px;"/>
+                            <col style="width: 300px;"/>
+                            <col style="width: 200px;"/>
+                            <col style="width: 200px;"/>
+                        </colgroup>
+                        <tbody id="earringAuction">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div style="display: inline-block;width:calc(100% / 3 - 10px);height:600px;">
+                반지 : <span id="ringAuctionCnt"></span>
+                <div style="overflow-y: scroll;height:100%;">
+                    <table style="border-collapse: collapse; font-size: 8pt;table-layout: fixed;">
+                        <colgroup>
+                            <col style="width: 130px;"/>
+                            <col style="width: 40px;"/>
+                            <col style="width: 200px;"/>
+                            <col style="width: 300px;"/>
+                            <col style="width: 200px;"/>
+                            <col style="width: 200px;"/>
+                        </colgroup>
+                        <tbody id="ringAuction">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </body>
 
