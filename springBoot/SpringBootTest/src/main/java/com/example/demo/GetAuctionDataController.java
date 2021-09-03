@@ -25,6 +25,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.FileReader;
+import java.io.IOException;
 
 @Controller
 public class GetAuctionDataController {
@@ -75,16 +76,12 @@ public class GetAuctionDataController {
 	//경매장 호출
 	@RequestMapping(value="/SearchAuctionItems", method = RequestMethod.POST)
 	public void searchAuctionItems(@RequestParam Map<String, Object> param, HttpServletResponse response) throws Exception {		
-		//경매장 호출 페이지
-		String reqUrl = "https://lostark.game.onstove.com/Auction/GetAuctionListV2";
-		
 		//reqData Setting
 		HashMap<String, String> reqData = new HashMap<String, String>();
 		reqData.put("request[firstCategory]", (String)param.get("request[firstCategory]"));
 		reqData.put("request[secondCategory]", (String)param.get("request[secondCategory]"));
 		reqData.put("request[itemTier]", (String)param.get("request[itemTier]"));
 		reqData.put("request[itemGrade]", (String)param.get("request[itemGrade]"));
-		reqData.put("request[pageNo]", (String)param.get("request[pageNo]"));
 		reqData.put("request[sortOption][Sort]", (String)param.get("request[sortOption][Sort]"));
 		reqData.put("request[sortOption][IsDesc]", (String)param.get("request[sortOption][IsDesc]"));
 		for(Integer i = 0; i < 4; i++)
@@ -95,14 +92,25 @@ public class GetAuctionDataController {
 				reqData.put("request[etcOptionList][" + i.toString() + "][secondOption]", (String)param.get("request[etcOptionList][" + i.toString() + "][secondOption]"));				
 			}
 		}
-		
+		response.setContentType("text/html; charset=UTF-8");
+    	PrintWriter out = response.getWriter();		
+    	
+		//경매장 호출 페이지
+		String reqUrl = "https://lostark.game.onstove.com/Auction/GetAuctionListV2";		
+		System.out.println(getAuctionItemList(reqUrl, reqData, (String)param.get("suatCookie"), 1).toString());
+	}
+
+	public JSONArray getAuctionItemList(String reqUrl, HashMap<String, String> reqData, String suatCookie, Integer page) throws Exception
+	{
+		reqData.put("request[pageNo]", page.toString());
 		//페이지 넘어가며 반환 데이터 크롤링
 		//stove 로그인(suat) 쿠키값 필요하여 추가 파라미터 적용
 		JSONArray jArr = new JSONArray();
 		Document doc = Jsoup.connect(reqUrl)
-	            .cookie("SUAT", (String)param.get("suatCookie"))
+	            .cookie("SUAT", suatCookie)
 				.data(reqData).post();		
 		
+		System.out.println(doc.toString());
 		Elements trs = doc.select("tr");
 		for (Element tr : trs) {
 			Elements grades = tr.select("div.grade");
@@ -160,7 +168,7 @@ public class GetAuctionDataController {
 					}
 				}
 				rtnObj.put("option", rtnObjArr);
-
+				
 				rtnObj.put("rowprice", row_price.html());
 				rtnObj.put("buyprice", buy_price.html());
 				jArr.add(rtnObj);
@@ -168,10 +176,13 @@ public class GetAuctionDataController {
 		}
 
 
-		response.setContentType("text/html; charset=UTF-8");
-    	PrintWriter out = response.getWriter();
-    	out.print(jArr.toString());
+
+
+
+
+		return jArr;
 	}
+
 
 	public static String removeTag(String html) throws Exception {
 		return html.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");

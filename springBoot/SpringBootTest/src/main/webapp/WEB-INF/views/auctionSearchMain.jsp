@@ -489,10 +489,30 @@
                         searchData["request[etcOptionList][" + etcIdx + "][secondOption]"] = String(optItem);
                         searchData["suatCookie"] = $("#suatCookie").val();
                         getAuctionData(resDataArr, itemType, searchData);
+                        //getAuctionData(resDataArr, itemType, searchData);
                     }
                 }
             }
 
+            function getAuctionData(resArr, dataType, searchObj) {
+                $.ajax({
+                    url: "/SearchAuctionItems",
+                    type: "POST",
+                    datatype: "json",
+                    data: searchObj,
+                    success: function (data) {
+                        try{
+                            debugger
+                        }
+                        catch(ex)
+                        {
+                            return;
+                        }
+                    }
+                });
+            }
+
+            /*            
             function getAuctionData(resArr, dataType, searchObj, page) {
                 if (page == null) {
                     page = 1;
@@ -527,8 +547,7 @@
                     }
                 });
             }
-
-            
+            */
             /*
                 {
                     "engraving": {
