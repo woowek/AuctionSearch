@@ -385,9 +385,9 @@
                     optCombData = getCombinations(searchOptData, 2);
                 }
                 //목걸이
-                searchMaecketItem_necklace(engvCombData, optCombData);
+                //searchMaecketItem_necklace(engvCombData, optCombData);
                 //귀걸이
-                searchMaecketItem("200020", engvCombData, searchOptData);
+                //searchMaecketItem("200020", engvCombData, searchOptData);
                 //반지
                 searchMaecketItem("200030", engvCombData, searchOptData);
             }
