@@ -36,9 +36,7 @@
             var searchOptData = new Array();
 
             //결과 데이터
-            var auctionResultNecklace;
-            var auctionResultEarring;
-            var auctionResultRing;
+            var ringAuctionList = new AuctionList();
 
             $( document ).ready(function() {
                 var suatCookieVal = getCookie("suat");
@@ -391,8 +389,8 @@
                 //귀걸이
                 //searchMaecketItem("200020", engvCombData, searchOptData);
                 //반지
-                var ringAuctionList = new AuctionList();
                 ringAuctionList.searchMaecketItem("200030", engvCombData, searchOptData);
+                debugger
             }
 
             function getCombinations(arr, selectNumber) {

@@ -82,7 +82,7 @@ public class AuctionList {
 				{
 					rtnObjArr.add(removeTag(val));
 				}
-				rtnObj.put("engraving", rtnObjArr);
+				rtnObj.put("option", rtnObjArr);
 				
 				if(((JSONObject)jsonObj.get("Element_008")).get("type").equals("SingleTextBox"))
 				{
@@ -100,7 +100,7 @@ public class AuctionList {
 						rtnObjArr.add(removeTag(val));
 					}
 				}
-				rtnObj.put("option", rtnObjArr);				
+				rtnObj.put("engraving", rtnObjArr);				
 				rtnObj.put("rowprice", row_price.html());
 				rtnObj.put("buyprice", buy_price.html());
 				itemListArr.add(rtnObj);
