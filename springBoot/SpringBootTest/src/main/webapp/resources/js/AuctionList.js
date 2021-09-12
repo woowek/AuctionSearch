@@ -60,6 +60,37 @@ var AuctionList = function(){
         }
     }
     */
+
+    /*
+    this.searchMarket = function(suatCookieVal)
+    {
+        var engvCombData = new Array();
+        var optCombData = new Array();
+        if(searchEngvData.length < 2)
+        {
+            engvCombData.push(searchEngvData);
+        }
+        else{
+            engvCombData = getCombinations(searchEngvData, 2);
+        }
+        if(searchOptData.length < 2)
+        {
+            optCombData.push(searchOptData);
+        }
+        else{
+            optCombData = getCombinations(searchOptData, 2);
+        }
+        //목걸이
+        //searchMaecketItem_necklace(engvCombData, optCombData);
+        //귀걸이
+        //searchMaecketItem("200020", engvCombData, searchOptData);
+        //반지
+        ringAuctionList.searchMaecketItem("200030", engvCombData, searchOptData);
+    }
+
+
+
+
     this.searchMaecketItem = function(itemType, engv, opt)
     {
         switch(itemType)
@@ -111,7 +142,7 @@ var AuctionList = function(){
             url: "/SearchAuctionItems",
             type: "POST",
             datatype: "json",
-            data: searchObj,
+            data: ,
             success: function (data) {
                 try{
                     parentFunc.listJson = JSON.parse(data);
@@ -125,6 +156,60 @@ var AuctionList = function(){
             }
         });
     };
+*/
+
+    this.getAuctionData = function(itemType, engvData, optData) {
+        var engvCombData = new Array();
+        var optCombData = new Array();
+        if(engvData.length < 2)
+        {
+            engvCombData.push(engvData);
+        }
+        else{
+            engvCombData = this.getCombinations(engvData, 2);
+        }
+        if(optData.length < 2)
+        {
+            optCombData.push(optData);
+        }
+        else{
+            optCombData = this.getCombinations(optData, 2);
+        }
+
+        var parentFunc = this;
+        var searchData = {itemType : itemType, engData : engvCombData, optData : optCombData};
+        debugger
+        $.ajax({
+            url: "/SearchAuctionItems",
+            type: "POST",
+            datatype: "json",
+            data: searchData,
+            success: function (data) {
+                try{
+                    debugger
+                    parentFunc.listJson = JSON.parse(data);
+                    parentFunc.makeAuctionResult(parentFunc.listJson);
+                }
+                catch(ex)
+                {
+                    return;
+                }
+            }
+        });
+    };
+
+    this.getCombinations = function (arr, selectNumber) {
+        const results = [];
+        if (selectNumber === 1) return arr.map((value) => [value]); // 1개씩 택할 때, 바로 모든 배열의 원소 return
+        arr.forEach((fixed, index, origin) => {
+            const rest = origin.slice(index + 1); // 해당하는 fixed를 제외한 나머지 뒤
+            const combinations = this.getCombinations(rest, selectNumber - 1); // 나머지에 대해서 조합을 구한다.
+            const attached = combinations.map((combination) => [fixed, ...combination]); //  돌아온 조합에 떼 놓은(fixed) 값 붙이기
+            results.push(...attached); // 배열 spread syntax 로 모두다 push
+        });
+        return results;
+    }
+
 
     this.makeAuctionResult = function (jsonData) {
         var divObj = document.createElement("div");
