@@ -91,50 +91,6 @@ var AuctionList = function(){
 
 
 
-    this.searchMaecketItem = function(itemType, engv, opt)
-    {
-        switch(itemType)
-        {
-            case "200010":
-                this.typeText = "목걸이";
-                break;
-            case "200020":
-                this.typeText = "귀걸이";
-                break;
-            case "200030":
-                this.typeText = "반지";
-                break;
-            default:
-                break;
-        }
-
-        for(engvArr of engv)
-        {
-            for(optItem of opt)
-            {
-                var resDataArr = new Array();
-                var searchData = {
-                    "request[firstCategory]":"200000",
-                    "request[secondCategory]":String(itemType),
-                    "request[itemTier]":"3",
-                    "request[itemGrade]":"5",
-                    "request[sortOption][Sort]":"BUY_PRICE",//즉구가 정렬 기준
-                    "request[sortOption][IsDesc]":"false"//즉구가 정렬 기준
-                };
-                var etcIdx = 0;
-                for(item of engvArr)
-                {
-                    searchData["request[etcOptionList][" + etcIdx + "][firstOption]"] = "3";
-                    searchData["request[etcOptionList][" + etcIdx + "][secondOption]"] = String(item);
-                    etcIdx++;
-                }
-                searchData["request[etcOptionList][" + etcIdx + "][firstOption]"] = "2";
-                searchData["request[etcOptionList][" + etcIdx + "][secondOption]"] = String(optItem);
-                searchData["suatCookie"] = $("#suatCookie").val();
-                this.getAuctionData(resDataArr, itemType, searchData);
-            }
-        }
-    };
 
     this.getAuctionData = function(resArr, dataType, searchObj) {
         var parentFunc = this;
@@ -178,12 +134,12 @@ var AuctionList = function(){
 
         var parentFunc = this;
         var searchData = {itemType : itemType, engData : engvCombData, optData : optCombData};
-        debugger
         $.ajax({
             url: "/SearchAuctionItems",
             type: "POST",
             datatype: "json",
-            data: searchData,
+            data: JSON.stringify(searchData),            
+            contentType: "application/json; charset=utf-8;",
             success: function (data) {
                 try{
                     debugger
