@@ -173,11 +173,9 @@ public class AuctionList {
 				for(int i = 0 ; i < itemListArr.size(); i++)
 				{
 					String listItemPrice = (String)((JSONObject)itemListArr.get(i)).get("buyprice");
-					System.out.println("itemPrice : " + listItemPrice);
-					System.out.println("buyPrice : " + buyPrice);
-					if(Integer.parseInt(listItemPrice) < Integer.parseInt(buyPrice))
+					if(Integer.parseInt(listItemPrice) > Integer.parseInt(buyPrice))
 					{
-						itemListArr.add(i + 1, rtnObj);
+						itemListArr.add(i, rtnObj);
 						isInserted = true;
 						break;
 					}

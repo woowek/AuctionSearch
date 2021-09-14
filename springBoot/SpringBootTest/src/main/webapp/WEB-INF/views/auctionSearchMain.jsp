@@ -366,7 +366,7 @@
             {
                 setCookie("suat", $("#suatCookie").val());                
                 //목걸이
-                //necklaceAuctionList.getAuctionData("200010", searchEngvData, searchOptData);
+                necklaceAuctionList.getAuctionData($("#suatCookie").val(), "200010", searchEngvData, searchOptData);
                 //귀걸이
                 //earringAuctionList.getAuctionData("200020", searchEngvData, searchOptData);
                 //반지
