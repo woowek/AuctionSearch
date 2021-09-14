@@ -370,7 +370,7 @@
                 //귀걸이
                 //earringAuctionList.getAuctionData("200020", searchEngvData, searchOptData);
                 //반지
-                ringAuctionList.getAuctionData("200030", searchEngvData, searchOptData);
+                ringAuctionList.getAuctionData($("#suatCookie").val(), "200030", searchEngvData, searchOptData);
                 debugger
             }
 
@@ -481,7 +481,7 @@
                             <input type="checkbox" onclick="toggleStatus(this);" checked="checked">
                         </th>
                         <th rowspan="2">
-                            반지 각인
+                            각인
                         </th>
                         <td>
                             각인1

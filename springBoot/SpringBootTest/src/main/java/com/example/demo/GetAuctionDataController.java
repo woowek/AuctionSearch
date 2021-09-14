@@ -51,83 +51,15 @@ public class GetAuctionDataController {
 	public void searchAuctionItems(@RequestBody String body, HttpServletResponse response) throws Exception {
 		
 
-/*
-
-    this.searchMaecketItem = function(itemType, engv, opt)
-    {
-        switch(itemType)
-        {
-            case "200010":
-                this.typeText = "목걸이";
-                break;
-            case "200020":
-                this.typeText = "귀걸이";
-                break;
-            case "200030":
-                this.typeText = "반지";
-                break;
-            default:
-                break;
-        }
-
-        for(engvArr of engv)
-        {
-            for(optItem of opt)
-            {
-                var resDataArr = new Array();
-                var searchData = {
-                    "request[firstCategory]":"200000",
-                    "request[secondCategory]":String(itemType),
-                    "request[itemTier]":"3",
-                    "request[itemGrade]":"5",
-                    "request[sortOption][Sort]":"BUY_PRICE",//즉구가 정렬 기준
-                    "request[sortOption][IsDesc]":"false"//즉구가 정렬 기준
-                };
-                var etcIdx = 0;
-                for(item of engvArr)
-                {
-                    searchData["request[etcOptionList][" + etcIdx + "][firstOption]"] = "3";
-                    searchData["request[etcOptionList][" + etcIdx + "][secondOption]"] = String(item);
-                    etcIdx++;
-                }
-                searchData["request[etcOptionList][" + etcIdx + "][firstOption]"] = "2";
-                searchData["request[etcOptionList][" + etcIdx + "][secondOption]"] = String(optItem);
-                searchData["suatCookie"] = $("#suatCookie").val();
-                this.getAuctionData(resDataArr, itemType, searchData);
-            }
-        }
-    };
-
-
-*/
 	    JSONParser jsonParse = new JSONParser();
 		JSONObject reqObj = (JSONObject)jsonParse.parse(body);
-		System.out.println("reqObj : " + reqObj.toString());
-/*
-		//reqData Setting
-		HashMap<String, String> reqData = new HashMap<String, String>();
-		reqData.put("request[firstCategory]", (String)param.get("request[firstCategory]"));
-		reqData.put("request[secondCategory]", (String)param.get("request[secondCategory]"));
-		reqData.put("request[itemTier]", (String)param.get("request[itemTier]"));
-		reqData.put("request[itemGrade]", (String)param.get("request[itemGrade]"));
-		reqData.put("request[sortOption][Sort]", (String)param.get("request[sortOption][Sort]"));
-		reqData.put("request[sortOption][IsDesc]", (String)param.get("request[sortOption][IsDesc]"));
-		for(Integer i = 0; i < 4; i++)
-		{
-			if((String)param.get("request[etcOptionList][" + i.toString() + "][firstOption]")!=null)
-			{
-				reqData.put("request[etcOptionList][" + i.toString() + "][firstOption]", (String)param.get("request[etcOptionList][" + i.toString() + "][firstOption]"));
-				reqData.put("request[etcOptionList][" + i.toString() + "][secondOption]", (String)param.get("request[etcOptionList][" + i.toString() + "][secondOption]"));				
-			}
-		}	
-    	*/
+
 		//경매장 호출 페이지
 		String reqUrl = "https://lostark.game.onstove.com/Auction/GetAuctionListV2";
-		//AuctionList itemSearchList = new AuctionList(reqUrl, reqData, (String)param.get("suatCookie"));
+		AuctionList itemSearchList = new AuctionList(reqUrl, (String)reqObj.get("suatCookie"), (String)reqObj.get("itemType"), (JSONArray)reqObj.get("engData"), (JSONArray)reqObj.get("optData"));
 		
 		response.setContentType("text/html; charset=UTF-8");
     	PrintWriter out = response.getWriter();
-    	//out.print(itemSearchList.itemListArr.toString());
-    	out.print("");
+    	out.print(itemSearchList.itemListArr.toString());
 	}
 }

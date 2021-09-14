@@ -114,7 +114,7 @@ var AuctionList = function(){
     };
 */
 
-    this.getAuctionData = function(itemType, engvData, optData) {
+    this.getAuctionData = function(suatCookie, itemType, engvData, optData) {
         var engvCombData = new Array();
         var optCombData = new Array();
         if(engvData.length < 2)
@@ -133,7 +133,7 @@ var AuctionList = function(){
         }
 
         var parentFunc = this;
-        var searchData = {itemType : itemType, engData : engvCombData, optData : optCombData};
+        var searchData = {suatCookie : suatCookie, itemType : itemType, engData : engvCombData, optData : optCombData};
         $.ajax({
             url: "/SearchAuctionItems",
             type: "POST",
@@ -141,6 +141,7 @@ var AuctionList = function(){
             data: JSON.stringify(searchData),            
             contentType: "application/json; charset=utf-8;",
             success: function (data) {
+                debugger
                 try{
                     debugger
                     parentFunc.listJson = JSON.parse(data);
