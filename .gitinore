@@ -7,6 +7,8 @@
 
 
 
-springBoot/.metadata/
+/.metadata/
 
-springBoot/Servers/
+/.vscode/
+
+/Servers/
