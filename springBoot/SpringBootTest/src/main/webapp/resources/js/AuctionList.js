@@ -19,11 +19,10 @@
 //-> minValue: 최소
 //-> maxValue : 최대
 var AuctionList = function(){
-    this.typeText = "";
-    this.listJson = "";
-    this.listObject = "";
-    this.searchEndFunc = "";
-
+    this.typeText = "";//아이템 타입
+    this.listJson = "";//결과데이터
+    this.listObject = "";//생성 태그
+    
     this.getAuctionData = function(suatCookie, itemType, engvData, optData, insertTargetDiv) {
         switch (itemType) {
             case "200010":
