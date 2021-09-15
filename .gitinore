@@ -3,7 +3,8 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=eclipse
 
 ### Eclipse ###
-.metadata
+/.metadata
+.metadata/
 bin/
 tmp/
 *.tmp
@@ -16,8 +17,8 @@ local.properties
 .recommenders
 
 #Server folder ignore
-/Servers/
-
+/Servers
+Servers/
 
 # External tool builders
 .externalToolBuilders/
