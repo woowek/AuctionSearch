@@ -120,6 +120,23 @@
                         $(".engraving").append(optionObj);
                     }
                 }
+
+                for (var i = 0; i < $(".engraving").length; i++) 
+                {
+                    //여러개의 셀렉트 박스가 존재하기 때문에 $('.select').eq(i) 로 하나씩 가져온다.
+                    var oOptionList = $(".engraving").eq(i).find('option');
+                    oOptionList.sort(function (a, b) {
+                        if (a.text > b.text) return 1;
+                        else if (a.text < b.text) return -1;
+                        else {
+                            if (a.value > b.value) return 1;
+                            else if (a.value < b.value) return -1;
+                            else return 0;
+                        }
+                    });
+                    $(".engraving").eq(i).html(oOptionList);
+                    $(".engraving").eq(i).val(0);
+                }
             }
             
             function toggleStatus(obj)
@@ -366,12 +383,11 @@
             {
                 setCookie("suat", $("#suatCookie").val());                
                 //목걸이
-                necklaceAuctionList.getAuctionData($("#suatCookie").val(), "200010", searchEngvData, searchOptData);
+                necklaceAuctionList.getAuctionData($("#suatCookie").val(), "200010", searchEngvData, searchOptData, document.getElementById("auctionList"));
                 //귀걸이
-                //earringAuctionList.getAuctionData("200020", searchEngvData, searchOptData);
+                earringAuctionList.getAuctionData($("#suatCookie").val(), "200020", searchEngvData, searchOptData, document.getElementById("auctionList"));
                 //반지
-                ringAuctionList.getAuctionData($("#suatCookie").val(), "200030", searchEngvData, searchOptData);
-                debugger
+                ringAuctionList.getAuctionData($("#suatCookie").val(), "200030", searchEngvData, searchOptData, document.getElementById("auctionList"));
             }
 
         </script>
@@ -387,7 +403,13 @@
             t.select();<br/>
             document.execCommand("copy");<br/>
             document.body.removeChild(t);
-        </div> 
+        </div>        
+        <div style="font-size:8pt;border:1px solid black;width:450px;margin-bottom: 20px;padding:10px;">
+            검색조건<br>
+            1. 즉구가 없는 물건 제외<br>
+            2. 3티어<br>
+            3. 유물장비
+        </div>
         <div>장비 상태</div>
         <div>
             <span>클래스</span>
@@ -411,7 +433,7 @@
                             각인1
                         </td>
                         <td>
-                            <select class="engraving">
+                            <select class="engraving" onkeypress="chkCode(this, event)">
                             </select>
                             <select class="engravingStatus">
                                 <option value="0">0</option>

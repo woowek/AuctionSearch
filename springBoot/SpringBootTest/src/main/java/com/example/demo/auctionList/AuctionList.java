@@ -69,10 +69,8 @@ public class AuctionList {
 				} 
 				else 
 				{
-					System.out.println("optItem : " + optItem.toString());	
 					for (Object opt : (JSONArray) optItem) 
 					{
-						System.out.println("opt : " + opt.toString());	
 						reqData.put("request[etcOptionList][" + etcIdx.toString() + "][firstOption]", "2");
 						reqData.put("request[etcOptionList][" + etcIdx.toString() + "][secondOption]", opt.toString());
 		        		getAuctionItemList(reqUrl, reqData, suatCookie, null);
@@ -89,7 +87,7 @@ public class AuctionList {
 			page = 1;
 		}	
 		reqData.put("request[pageNo]", page.toString());
-		System.out.println("reqData : " + reqData.toString());	
+		//System.out.println("reqData : " + reqData.toString());	
 		//페이지 넘어가며 반환 데이터 크롤링
 		//stove 로그인(suat) 쿠키값 필요하여 추가 파라미터 적용
 		Document doc = Jsoup.connect(reqUrl)
@@ -186,7 +184,7 @@ public class AuctionList {
 					isInserted = true;
 				}
 			}
-			System.out.println("itemCnt : " + itemCnt.toString());
+			//System.out.println("itemCnt : " + itemCnt.toString());
 		}
 		if(itemCnt > 0) {
 			//지연시간 0.2초 적용 문제가 있으려나..

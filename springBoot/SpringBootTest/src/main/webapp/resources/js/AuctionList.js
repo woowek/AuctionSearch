@@ -24,97 +24,19 @@ var AuctionList = function(){
     this.listObject = "";
     this.searchEndFunc = "";
 
-    /*
-    function searchMaecketItem_necklace(engv, opt)
-    {
-        $("#necklaceAuction").html("");
-        for(engvArr of engv)
-        {
-            for(optArr of opt)
-            {
-                var resDataArr = new Array();
-                var searchData = {
-                    "request[firstCategory]":"200000",
-                    "request[secondCategory]":"200010",
-                    "request[itemTier]":"3",
-                    "request[itemGrade]":"5",
-                    "request[sortOption][Sort]":"BUY_PRICE",//즉구가 정렬 기준
-                    "request[sortOption][IsDesc]":"false"//즉구가 정렬 기준
-                };
-                var etcIdx = 0;
-                for(item of engvArr)
-                {
-                    searchData["request[etcOptionList][" + etcIdx + "][firstOption]"] = "3";
-                    searchData["request[etcOptionList][" + etcIdx + "][secondOption]"] = String(item);
-                    etcIdx++;
-                }
-                for(item of optArr)
-                {
-                    searchData["request[etcOptionList][" + etcIdx + "][firstOption]"] = "2";
-                    searchData["request[etcOptionList][" + etcIdx + "][secondOption]"] = String(item);
-                    etcIdx++;
-                }
-                searchData["suatCookie"] = $("#suatCookie").val();
-                getAuctionData(resDataArr, "200010", searchData);
-            }
+    this.getAuctionData = function(suatCookie, itemType, engvData, optData, insertTargetDiv) {
+        switch (itemType) {
+            case "200010":
+                this.typeText = "목걸이";
+                break;
+            case "200020":
+                this.typeText = "귀걸이";
+                break;
+            case "200030":
+                this.typeText = "반지";
+                break;
         }
-    }
-    */
 
-    /*
-    this.searchMarket = function(suatCookieVal)
-    {
-        var engvCombData = new Array();
-        var optCombData = new Array();
-        if(searchEngvData.length < 2)
-        {
-            engvCombData.push(searchEngvData);
-        }
-        else{
-            engvCombData = getCombinations(searchEngvData, 2);
-        }
-        if(searchOptData.length < 2)
-        {
-            optCombData.push(searchOptData);
-        }
-        else{
-            optCombData = getCombinations(searchOptData, 2);
-        }
-        //목걸이
-        //searchMaecketItem_necklace(engvCombData, optCombData);
-        //귀걸이
-        //searchMaecketItem("200020", engvCombData, searchOptData);
-        //반지
-        ringAuctionList.searchMaecketItem("200030", engvCombData, searchOptData);
-    }
-
-
-
-
-
-    this.getAuctionData = function(resArr, dataType, searchObj) {
-        var parentFunc = this;
-        $.ajax({
-            url: "/SearchAuctionItems",
-            type: "POST",
-            datatype: "json",
-            data: ,
-            success: function (data) {
-                try{
-                    parentFunc.listJson = JSON.parse(data);
-                    parentFunc.makeAuctionResult(parentFunc.listJson);
-                    debugger
-                }
-                catch(ex)
-                {
-                    return;
-                }
-            }
-        });
-    };
-*/
-
-    this.getAuctionData = function(suatCookie, itemType, engvData, optData) {
         var engvCombData = new Array();
         var optCombData = new Array();
         if(engvData.length < 2)
@@ -141,11 +63,13 @@ var AuctionList = function(){
             data: JSON.stringify(searchData),            
             contentType: "application/json; charset=utf-8;",
             success: function (data) {
-                debugger
                 try{
-                    debugger
                     parentFunc.listJson = JSON.parse(data);
                     parentFunc.makeAuctionResult(parentFunc.listJson);
+                    if(insertTargetDiv)
+                    {
+                        insertTargetDiv.appendChild(parentFunc.listObject);
+                    }
                 }
                 catch(ex)
                 {
@@ -172,11 +96,12 @@ var AuctionList = function(){
         var divObj = document.createElement("div");
         divObj.style.display = "inline-block";
         divObj.style.width = "calc(100% / 3 - 10px)";
-        divObj.style.height = "600px";
-        debugger
+        divObj.style.height = "300px";
+        divObj.style.overflowY = "scroll";
         divObj.innerHTML = this.typeText + " : " + jsonData.length;
 
         var tableObj = document.createElement("table");
+        tableObj.style.fontSize = "8pt";
         for (item of jsonData) {
             var trObj = document.createElement("tr");
             trObj.style.borderTop = "1px solid black";
