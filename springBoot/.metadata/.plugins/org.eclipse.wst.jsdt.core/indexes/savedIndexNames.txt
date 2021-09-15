@@ -1,7 +1,0 @@
-INDEX VERSION 1.4+E:\github\spring\AuctionSearch\springBoot\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
-1398456249.index
-2855668020.index
-2384434108.index
-3977754100.index
-2333932213.index
-813751060.index

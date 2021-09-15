@@ -1,3 +1,0 @@
-INDEX VERSION 1.131
-E:\github\spring\AuctionSearch\springBoot\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2264433056.index
-\SpringBootTest\src\main\java
