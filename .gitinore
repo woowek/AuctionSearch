@@ -7,10 +7,6 @@
 
 
 
-/.metadata
-.metadata/
-/.metadata/
+springBoot/.metadata/
 
-/Servers
-Servers/
-/Servers/
+springBoot/Servers/
