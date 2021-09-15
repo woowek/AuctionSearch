@@ -4,14 +4,17 @@
 
 ### Eclipse ###
 .metadata
-.metadata/
-/.metadata/
 bin/
 tmp/
 *.tmp
 *.bak
 *.swp
 *~.nib
+*.log
+*.lock
+*.zip
+
+
 local.properties
 .settings/
 .loadpath
