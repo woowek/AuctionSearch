@@ -1,2 +1,2 @@
 # folder 디렉토리에 있는 모든 파일 무시하기 (하위 폴더까지)
-*.metadata
+/.metadata/
