@@ -13,6 +13,7 @@
         <script type="text/javascript" src="/resources/jQuery/jquery-1.9.1.min.js?ver=<%=fmt.format(new Date())%>"></script>
         <script type="text/javascript" src="/resources/jQuery/jquery-ui.min.js?ver=<%=fmt.format(new Date())%>"></script>
         <script type="text/javascript" src="/resources/js/AuctionList.js?ver=<%=fmt.format(new Date())%>"></script>
+        <script type="text/javascript" src="/resources/js/ItemInfo.js?ver=<%=fmt.format(new Date())%>"></script>
         
         
         <script type="text/javascript">
@@ -22,6 +23,19 @@
             var statEngv = new Map();
             var statOpt = new Map();
             var statDebuff = new Map();
+
+
+            //아이템/각인 데이터
+            var necklaceItem = new ItemInfo("200010");
+            var earringItem1 = new ItemInfo("200020");
+            var earringItem2 = new ItemInfo("200020");
+            var ringItem1 = new ItemInfo("200030");
+            var ringItem2 = new ItemInfo("200030");
+            var stoneItem = new ItemInfo("30000");
+            var engOpt = new ItemInfo("00000");
+
+
+
 
             //목표치 데이터
             var goalEngv = new Map();
@@ -46,7 +60,6 @@
                 {
                     $("#suatCookie").val(suatCookieVal);
                 }
-
                 getMarketData();
             });
 
@@ -137,6 +150,11 @@
                     $(".engraving").eq(i).html(oOptionList);
                     $(".engraving").eq(i).val(0);
                 }
+
+                /////////////////////
+                necklaceItem.makeItemTag(marketJson);
+                $("#test").append(necklaceItem.itemObject);
+                debugger
             }
             
             function toggleStatus(obj)
@@ -421,6 +439,9 @@
         <div>
             <div style="display:inline-block; vertical-align:top;">
                 <div>현상태</div>
+                <div id="test">
+                    
+                </div>
                 <table style="margin: 5px;">
                     <tr rowType="stone">
                         <td rowspan="3">
