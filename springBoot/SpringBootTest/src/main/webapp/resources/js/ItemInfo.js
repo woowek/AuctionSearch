@@ -4,15 +4,29 @@ var ItemInfo = function(itemType)
     this.itemType = itemType;//아이템 타입
     this.equipName = "";//아이템 항목
     this.itemObject = "";//태그
-    this.engv = "";//각인
-    this.option = "";//특성
     this.activated = true;//활성화 유무
     this.classType = "";//직업
-    this.engvSelectTag = "";//각인 태그
-    this.statSelectTag = "";//특성 태그
     
-    this.makeItemTag = function(marketJSON, insertDiv)
+    this.marketJson = "";//경매장 기본 데이터
+    this.engv = "";//각인
+    this.engvVal = 0;//각인값
+    this.stat = "";//특성
+    this.statVal = 0;//특성값
+
+    //함수 구성
+    //1. 전체태그 생성
+    //2. 각인 태그 생성
+    //3. 특성 태그 생성
+    //4. 클래스 변경
+    //5. 각인 변경
+    //6. 각인 값 변경
+    //7. 특성 변경
+    //8. 특성 값 변경
+
+    this.makeItemTag = function(marketJSON, classType, insertDiv)
     {
+        this.marketJson = marketJSON;
+
         var rowSpanLen = 0;
         switch (this.itemType) {
             case "200010":
@@ -83,17 +97,6 @@ var ItemInfo = function(itemType)
         thObject.rowSpan = rowSpanLen;
         thObject.innerHTML = this.equipName;
         trObject.appendChild(thObject);
-        //장비명 -> 목걸이, 귀걸이, 반지
-        if(this.itemType == "200010" || this.itemType == "200020" || this.itemType == "200030")
-        {
-            var tdObject = document.createElement("td");
-            tdObject.innerHTML = "장비명";
-            trObject.appendChild(tdObject);
-            var tdObject = document.createElement("td");
-            var selectObj = document.createElement("select");
-            tdObject.appendChild(selectObj);
-            trObject.appendChild(tdObject);
-        }
         //각인1 -> 목걸이, 귀걸이, 반지, 돌, 각인
         if(this.itemType == "200010" || this.itemType == "200020" || this.itemType == "200030" || this.itemType == "30000" || this.itemType == "00000")
         {
@@ -102,6 +105,7 @@ var ItemInfo = function(itemType)
             trObject.appendChild(tdObject);
             var tdObject = document.createElement("td");
             var selectObj = document.createElement("select");
+            selectObj.setAttribute("class", "engraving");
             tdObject.appendChild(selectObj);
             var selectObj = document.createElement("select");
             for(var i = 0 ; i < 6; i++)
@@ -124,6 +128,7 @@ var ItemInfo = function(itemType)
             trObject.appendChild(tdObject);
             var tdObject = document.createElement("td");
             var selectObj = document.createElement("select");
+            selectObj.setAttribute("class", "engraving");
             tdObject.appendChild(selectObj);
             var selectObj = document.createElement("select");
             for(var i = 0 ; i < 6; i++)
@@ -145,9 +150,26 @@ var ItemInfo = function(itemType)
             tdObject.innerHTML = "특성";
             trObject.appendChild(tdObject);
             var tdObject = document.createElement("td");
-            var selectObj = document.createElement("select");
-            tdObject.appendChild(selectObj);
+            var statSelTag = document.createElement("select");
+            for(var i = 0 ; i < this.marketJson.marketAuction.marketMenuAuctionEtcList[1].marketMenuEtcOptionSubList.length; i++)
+            {
+                var statusOptionData = this.marketJson.marketAuction.marketMenuAuctionEtcList[1].marketMenuEtcOptionSubList[i];
+                var optionObj = document.createElement("option");
+                optionObj.innerHTML = statusOptionData.text;
+                optionObj.value = statusOptionData.value;
+                statSelTag.append(optionObj);
+            }
+            tdObject.appendChild(statSelTag);
             var inputObj = document.createElement("input");
+            inputObj.onkeydown = function(event)
+            {
+                if (event.key >= 0 && event.key <= 9) {
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
             tdObject.appendChild(inputObj);
             trObject.appendChild(tdObject);
             tableObject.appendChild(trObject);
@@ -160,9 +182,26 @@ var ItemInfo = function(itemType)
             tdObject.innerHTML = "특성";
             trObject.appendChild(tdObject);
             var tdObject = document.createElement("td");
-            var selectObj = document.createElement("select");
-            tdObject.appendChild(selectObj);
+            var statSelTag = document.createElement("select");
+            for(var i = 0 ; i < this.marketJson.marketAuction.marketMenuAuctionEtcList[1].marketMenuEtcOptionSubList.length; i++)
+            {
+                var statusOptionData = this.marketJson.marketAuction.marketMenuAuctionEtcList[1].marketMenuEtcOptionSubList[i];
+                var optionObj = document.createElement("option");
+                optionObj.innerHTML = statusOptionData.text;
+                optionObj.value = statusOptionData.value;
+                statSelTag.append(optionObj);
+            }
+            tdObject.appendChild(statSelTag);
             var inputObj = document.createElement("input");
+            inputObj.onkeydown = function(event)
+            {
+                if (event.key >= 0 && event.key <= 9) {
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
             tdObject.appendChild(inputObj);
             trObject.appendChild(tdObject);
             tableObject.appendChild(trObject);
@@ -205,16 +244,66 @@ var ItemInfo = function(itemType)
             trObject.appendChild(tdObject);
             tableObject.appendChild(trObject);
         }
+        //장비명 -> 목걸이, 귀걸이, 반지
+        if(this.itemType == "200010" || this.itemType == "200020" || this.itemType == "200030")
+        {
+            var trObject = document.createElement("tr");
+            var tdObject = document.createElement("td");
+            tdObject.innerHTML = "장비명";
+            trObject.appendChild(tdObject);
+            var tdObject = document.createElement("td");
+            var selectObj = document.createElement("select");
+            tdObject.appendChild(selectObj);
+            trObject.appendChild(tdObject);
+            tableObject.appendChild(trObject);
+        }
 
         this.itemObject = tableObject;
         if(insertDiv)
         {
             insertDiv.appendChild(this.itemObject);
         }
+
+        this.classType = classType;
+        this.makeEngvSelTag();
+    }
+
+    this.makeEngvSelTag = function()
+    {
+        debugger        
+        $(this.itemObject).find(".engraving").html("");
+        for(var i = 0 ; i < this.marketJson.marketAuction.marketMenuAuctionEtcList[2].marketMenuEtcOptionSubList.length; i++)
+        {
+            var engravingData = this.marketJson.marketAuction.marketMenuAuctionEtcList[2].marketMenuEtcOptionSubList[i];
+            if(engravingData.class == 0 || engravingData.class == this.classType)
+            {
+                var optionObj = document.createElement("option");
+                optionObj.innerHTML = engravingData.text;
+                optionObj.value = engravingData.value;
+                $(this.itemObject).find(".engraving").append(optionObj);
+            }
+        }
+
+        for (var i = 0; i < $(this.itemObject).find(".engraving").length; i++) 
+        {
+            //여러개의 셀렉트 박스가 존재하기 때문에 $('.select').eq(i) 로 하나씩 가져온다.
+            var oOptionList = $(this.itemObject).find(".engraving").eq(i).find('option');
+            oOptionList.sort(function (a, b) {
+                if (a.text > b.text) return 1;
+                else if (a.text < b.text) return -1;
+                else {
+                    if (a.value > b.value) return 1;
+                    else if (a.value < b.value) return -1;
+                    else return 0;
+                }
+            });
+            $(this.itemObject).find(".engraving").eq(i).html(oOptionList);
+            $(this.itemObject).find(".engraving").eq(i).val(0);
+        }
     }
 
     this.changeClass = function(classType){
         this.classType = classType;
-
+        this.makeEngvSelTag();
     }
 }

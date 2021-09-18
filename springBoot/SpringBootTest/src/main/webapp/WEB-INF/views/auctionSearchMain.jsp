@@ -72,14 +72,6 @@
                 document.cookie = cookieText;
             }
 
-            $(document).on("keypress", ".statusOptionDegree", function (event) {
-                if (event.key === '.' || event.key === '-' || event.key >= 0 && event.key <= 9) {
-                    return true;
-                }
-                else{
-                    return false;
-                }
-            })
 
             //초기 경매장 데이터 init
             function getMarketData()
@@ -153,14 +145,13 @@
 
                 //아이템 목록 추가
                 let equipDiv = document.getElementById("equipList");
-                stoneItem.makeItemTag(marketJson, equipDiv);
-                engOpt.makeItemTag(marketJson, equipDiv);
-                necklaceItem.makeItemTag(marketJson, equipDiv);
-                earringItem1.makeItemTag(marketJson, equipDiv);
-                earringItem2.makeItemTag(marketJson, equipDiv);
-                ringItem1.makeItemTag(marketJson, equipDiv);
-                ringItem2.makeItemTag(marketJson, equipDiv);
-                debugger
+                stoneItem.makeItemTag(marketJson, $(".selClass").val(), equipDiv);
+                engOpt.makeItemTag(marketJson, $(".selClass").val(), equipDiv);
+                necklaceItem.makeItemTag(marketJson, $(".selClass").val(), equipDiv);
+                earringItem1.makeItemTag(marketJson, $(".selClass").val(), equipDiv);
+                earringItem2.makeItemTag(marketJson, $(".selClass").val(), equipDiv);
+                ringItem1.makeItemTag(marketJson, $(".selClass").val(), equipDiv);
+                ringItem2.makeItemTag(marketJson, $(".selClass").val(), equipDiv);
             }
             
             function toggleStatus(obj)
