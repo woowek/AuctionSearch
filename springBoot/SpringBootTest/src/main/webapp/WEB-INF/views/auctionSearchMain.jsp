@@ -434,7 +434,7 @@
             <input type="button" value="상점검색" onclick="searchMarket();"/>
         </div>
         <div>
-            <div style="display:inline-block; vertical-align:top;">
+            <div style="display:inline-block; vertical-align:top;width:calc(100% / 3)">
                 <div>현상태</div>
                 <div id="equipList">
                     

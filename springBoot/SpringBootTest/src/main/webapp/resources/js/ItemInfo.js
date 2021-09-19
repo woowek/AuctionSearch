@@ -8,10 +8,10 @@ var ItemInfo = function(itemType)
     this.classType = "";//직업
     
     this.marketJson = "";//경매장 기본 데이터
-    this.engv = "";//각인
-    this.engvVal = 0;//각인값
-    this.stat = "";//특성
-    this.statVal = 0;//특성값
+    this.engv = new Map();//각인
+    this.engvVal = new Map();//각인값
+    this.stat =  new Map();//특성
+    this.statVal = new Map();//특성값
 
     //함수 구성
     //1. 전체태그 생성
@@ -55,19 +55,23 @@ var ItemInfo = function(itemType)
         }
         var tableObject = document.createElement("table");
         tableObject.style.fontSize = "9pt";
-        tableObject.style.margin = "5px";
+        tableObject.style.marginTop = "20px";
         tableObject.style.tableLayout = "fixed";
+        tableObject.style.width = "100%";
         //colgroup
         var colgroupObj = document.createElement("colgroup");
         var colObj = document.createElement("col");
         colObj.style.width = "7px";
         colgroupObj.appendChild(colObj);
         var colObj = document.createElement("col");
-        colObj.style.width = "30px";
+        colObj.style.width = "70px";
+        colgroupObj.appendChild(colObj);
+        var colObj = document.createElement("col");
+        colObj.style.width = "70px";
         colgroupObj.appendChild(colObj);
         var colObj = document.createElement("col");
         colgroupObj.appendChild(colObj);
-
+        tableObject.appendChild(colgroupObj);
         var trObject = document.createElement("tr");
         var tdObject = document.createElement("td");
         tdObject.rowSpan = rowSpanLen;
@@ -81,12 +85,12 @@ var ItemInfo = function(itemType)
             {
                 itemInfo.activated = true;
                 $(itemInfo.itemObject).find("select").attr("disabled", false);
-                $(itemInfo.itemObject).find("input[type=text]").attr("disabled", false);
+                $(itemInfo.itemObject).find("input").attr("disabled", false);
             }
             else{
                 itemInfo.activated = false;
                 $(itemInfo.itemObject).find("select").attr("disabled", true);
-                $(itemInfo.itemObject).find("input[type=text]").attr("disabled", true);
+                $(itemInfo.itemObject).find("input").attr("disabled", true);
             }
         }
         chkBoxObj.checked = true;
@@ -108,12 +112,38 @@ var ItemInfo = function(itemType)
             selectObj.setAttribute("class", "engraving");
             tdObject.appendChild(selectObj);
             var selectObj = document.createElement("select");
-            for(var i = 0 ; i < 6; i++)
+            switch (this.itemType) {
+                case "200010":
+                case "200020":
+                case "200030":
+                    for (var i = 0; i < 6; i++) {
+                        var optionObj = document.createElement("option");
+                        optionObj.value = i;
+                        optionObj.innerHTML = i;
+                        selectObj.appendChild(optionObj);
+                    }
+                    break;
+                case "30000":
+                    for (var i = 0; i < 11; i++) {
+                        var optionObj = document.createElement("option");
+                        optionObj.value = i;
+                        optionObj.innerHTML = i;
+                        selectObj.appendChild(optionObj);
+                    }
+                    break;
+                case "00000":
+                    for (var i = 0; i < 13; i=i+3) {
+                        var optionObj = document.createElement("option");
+                        optionObj.value = i;
+                        optionObj.innerHTML = i;
+                        selectObj.appendChild(optionObj);
+                    }
+                    break;
+            }
+            selectObj.onchange = function(event)
             {
-                var optionObj = document.createElement("option");
-                optionObj.value = i;
-                optionObj.innerHTML = i;
-                selectObj.appendChild(optionObj);
+                debugger
+                this.engv["0"] = "";
             }
             tdObject.appendChild(selectObj);
             trObject.appendChild(tdObject);
@@ -131,12 +161,33 @@ var ItemInfo = function(itemType)
             selectObj.setAttribute("class", "engraving");
             tdObject.appendChild(selectObj);
             var selectObj = document.createElement("select");
-            for(var i = 0 ; i < 6; i++)
-            {
-                var optionObj = document.createElement("option");
-                optionObj.value = i;
-                optionObj.innerHTML = i;
-                selectObj.appendChild(optionObj);
+            switch (this.itemType) {
+                case "200010":
+                case "200020":
+                case "200030":
+                    for (var i = 0; i < 6; i++) {
+                        var optionObj = document.createElement("option");
+                        optionObj.value = i;
+                        optionObj.innerHTML = i;
+                        selectObj.appendChild(optionObj);
+                    }
+                    break;
+                case "30000":
+                    for (var i = 0; i < 11; i++) {
+                        var optionObj = document.createElement("option");
+                        optionObj.value = i;
+                        optionObj.innerHTML = i;
+                        selectObj.appendChild(optionObj);
+                    }
+                    break;
+                case "00000":
+                    for (var i = 0; i < 13; i=i+3) {
+                        var optionObj = document.createElement("option");
+                        optionObj.value = i;
+                        optionObj.innerHTML = i;
+                        selectObj.appendChild(optionObj);
+                    }
+                    break;
             }
             tdObject.appendChild(selectObj);
             trObject.appendChild(tdObject);
@@ -233,12 +284,25 @@ var ItemInfo = function(itemType)
             selectObj.appendChild(optionObj);
             tdObject.appendChild(selectObj);
             var selectObj = document.createElement("select");
-            for(var i = 0 ; i < 6; i++)
-            {
-                var optionObj = document.createElement("option");
-                optionObj.value = i;
-                optionObj.innerHTML = i;
-                selectObj.appendChild(optionObj);
+            switch (this.itemType) {
+                case "200010":
+                case "200020":
+                case "200030":
+                    for (var i = 0; i < 4; i++) {
+                        var optionObj = document.createElement("option");
+                        optionObj.value = i;
+                        optionObj.innerHTML = i;
+                        selectObj.appendChild(optionObj);
+                    }
+                    break;
+                case "30000":
+                    for (var i = 0; i < 11; i++) {
+                        var optionObj = document.createElement("option");
+                        optionObj.value = i;
+                        optionObj.innerHTML = i;
+                        selectObj.appendChild(optionObj);
+                    }
+                    break;
             }
             tdObject.appendChild(selectObj);
             trObject.appendChild(tdObject);
