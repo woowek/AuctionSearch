@@ -1,17 +1,21 @@
 var ItemInfo = function(itemType)
 {
+    //this 선언
+    var itemInfo = this;
     //itemType(200010 : 목걸이, 200020 : 귀걸이, 200030 : 반지, 30000 : 돌, 00000 : 각인)
-    this.itemType = itemType;//아이템 타입
-    this.equipName = "";//아이템 항목
-    this.itemObject = "";//태그
-    this.activated = true;//활성화 유무
-    this.classType = "";//직업
+    itemInfo.itemType = itemType;//아이템 타입
+    itemInfo.equipName = "";//아이템 항목
+    itemInfo.itemObject = "";//태그
+    itemInfo.activated = true;//활성화 유무
+    itemInfo.classType = "";//직업
     
-    this.marketJson = "";//경매장 기본 데이터
-    this.engv = new Map();//각인
-    this.engvVal = new Map();//각인값
-    this.stat =  new Map();//특성
-    this.statVal = new Map();//특성값
+    itemInfo.marketJson = "";//경매장 기본 데이터
+    itemInfo.engType = new Array();//각인
+    itemInfo.engVal = new Array();//각인값
+    itemInfo.statType =  new Array();//특성
+    itemInfo.statVal = new Array();//특성값
+    itemInfo.debuffType =  new Array();//디버프
+    itemInfo.debuffVal = new Array();//디버프값
 
     //함수 구성
     //1. 전체태그 생성
@@ -23,31 +27,31 @@ var ItemInfo = function(itemType)
     //7. 특성 변경
     //8. 특성 값 변경
 
-    this.makeItemTag = function(marketJSON, classType, insertDiv)
+    itemInfo.makeItemTag = function(marketJSON, classType, insertDiv)
     {
-        this.marketJson = marketJSON;
+        itemInfo.marketJson = marketJSON;
 
         var rowSpanLen = 0;
-        switch (this.itemType) {
+        switch (itemInfo.itemType) {
             case "200010":
                 rowSpanLen = 6;
-                this.equipName = "목걸이";
+                itemInfo.equipName = "목걸이";
                 break;
             case "200020":
                 rowSpanLen = 5;
-                this.equipName = "귀걸이";
+                itemInfo.equipName = "귀걸이";
                 break;
             case "200030":
                 rowSpanLen = 5;
-                this.equipName = "반지";
+                itemInfo.equipName = "반지";
                 break;
             case "30000":
                 rowSpanLen = 3;
-                this.equipName = "돌";
+                itemInfo.equipName = "돌";
                 break;
             case "00000":
                 rowSpanLen = 2;
-                this.equipName = "각인";
+                itemInfo.equipName = "각인";
                 break;
             default:
                 return;
@@ -78,19 +82,17 @@ var ItemInfo = function(itemType)
         //체크박스
         var chkBoxObj = document.createElement("input");
         chkBoxObj.type = "checkbox";
-        var itemInfo = this;
         chkBoxObj.onclick = function(){
-            debugger
             if(chkBoxObj.checked)
             {
                 itemInfo.activated = true;
                 $(itemInfo.itemObject).find("select").attr("disabled", false);
-                $(itemInfo.itemObject).find("input").attr("disabled", false);
+                $(itemInfo.itemObject).find("input").not("input[type=checkbox]").attr("disabled", false);
             }
             else{
                 itemInfo.activated = false;
                 $(itemInfo.itemObject).find("select").attr("disabled", true);
-                $(itemInfo.itemObject).find("input").attr("disabled", true);
+                $(itemInfo.itemObject).find("input").not("input[type=checkbox]").attr("disabled", true);
             }
         }
         chkBoxObj.checked = true;
@@ -99,20 +101,29 @@ var ItemInfo = function(itemType)
         //장비종류
         var thObject = document.createElement("th");
         thObject.rowSpan = rowSpanLen;
-        thObject.innerHTML = this.equipName;
+        thObject.innerHTML = itemInfo.equipName;
         trObject.appendChild(thObject);
         //각인1 -> 목걸이, 귀걸이, 반지, 돌, 각인
-        if(this.itemType == "200010" || this.itemType == "200020" || this.itemType == "200030" || this.itemType == "30000" || this.itemType == "00000")
+        if(itemInfo.itemType == "200010" || itemInfo.itemType == "200020" || itemInfo.itemType == "200030" || itemInfo.itemType == "30000" || itemInfo.itemType == "00000")
         {
             var tdObject = document.createElement("td");
             tdObject.innerHTML = "각인";
             trObject.appendChild(tdObject);
             var tdObject = document.createElement("td");
             var selectObj = document.createElement("select");
-            selectObj.setAttribute("class", "engraving");
+            selectObj.setAttribute("class", "engType");
+            selectObj.onchange = function(event)
+            {
+                itemInfo.engType[0] = event.target.value;
+            }
             tdObject.appendChild(selectObj);
             var selectObj = document.createElement("select");
-            switch (this.itemType) {
+            selectObj.setAttribute("class", "engVal");
+            selectObj.onchange = function(event)
+            {
+                itemInfo.engVal[0] = event.target.value;
+            }
+            switch (itemInfo.itemType) {
                 case "200010":
                 case "200020":
                 case "200030":
@@ -140,17 +151,12 @@ var ItemInfo = function(itemType)
                     }
                     break;
             }
-            selectObj.onchange = function(event)
-            {
-                debugger
-                this.engv["0"] = "";
-            }
             tdObject.appendChild(selectObj);
             trObject.appendChild(tdObject);
         }
         tableObject.appendChild(trObject);
         //각인2 -> 목걸이, 귀걸이, 반지, 돌, 각인
-        if(this.itemType == "200010" || this.itemType == "200020" || this.itemType == "200030" || this.itemType == "30000" || this.itemType == "00000")
+        if(itemInfo.itemType == "200010" || itemInfo.itemType == "200020" || itemInfo.itemType == "200030" || itemInfo.itemType == "30000" || itemInfo.itemType == "00000")
         {
             var trObject = document.createElement("tr");
             var tdObject = document.createElement("td");
@@ -158,10 +164,19 @@ var ItemInfo = function(itemType)
             trObject.appendChild(tdObject);
             var tdObject = document.createElement("td");
             var selectObj = document.createElement("select");
-            selectObj.setAttribute("class", "engraving");
+            selectObj.setAttribute("class", "engType");
+            selectObj.onchange = function(event)
+            {
+                itemInfo.engType[1] = event.target.value;
+            }
             tdObject.appendChild(selectObj);
             var selectObj = document.createElement("select");
-            switch (this.itemType) {
+            selectObj.setAttribute("class", "engVal");
+            selectObj.onchange = function(event)
+            {
+                itemInfo.engVal[1] = event.target.value;
+            }
+            switch (itemInfo.itemType) {
                 case "200010":
                 case "200020":
                 case "200030":
@@ -194,27 +209,34 @@ var ItemInfo = function(itemType)
             tableObject.appendChild(trObject);
         }
         //특성1 -> 목걸이, 귀걸이, 반지
-        if(this.itemType == "200010" || this.itemType == "200020" || this.itemType == "200030")
+        if(itemInfo.itemType == "200010" || itemInfo.itemType == "200020" || itemInfo.itemType == "200030")
         {
             var trObject = document.createElement("tr");
             var tdObject = document.createElement("td");
             tdObject.innerHTML = "특성";
             trObject.appendChild(tdObject);
             var tdObject = document.createElement("td");
-            var statSelTag = document.createElement("select");
-            for(var i = 0 ; i < this.marketJson.marketAuction.marketMenuAuctionEtcList[1].marketMenuEtcOptionSubList.length; i++)
+            var selectObj = document.createElement("select");
+            selectObj.setAttribute("class", "statType");
+            selectObj.onchange = function(event)
             {
-                var statusOptionData = this.marketJson.marketAuction.marketMenuAuctionEtcList[1].marketMenuEtcOptionSubList[i];
+                itemInfo.statType[0] = event.target.value;
+            }
+            for(var i = 0 ; i < itemInfo.marketJson.marketAuction.marketMenuAuctionEtcList[1].marketMenuEtcOptionSubList.length; i++)
+            {
+                var statusOptionData = itemInfo.marketJson.marketAuction.marketMenuAuctionEtcList[1].marketMenuEtcOptionSubList[i];
                 var optionObj = document.createElement("option");
                 optionObj.innerHTML = statusOptionData.text;
                 optionObj.value = statusOptionData.value;
-                statSelTag.append(optionObj);
+                selectObj.append(optionObj);
             }
-            tdObject.appendChild(statSelTag);
+            tdObject.appendChild(selectObj);
             var inputObj = document.createElement("input");
+            inputObj.setAttribute("class", "statVal");
             inputObj.onkeydown = function(event)
             {
                 if (event.key >= 0 && event.key <= 9) {
+                    itemInfo.statVal[0] = event.target.value + event.key;
                     return true;
                 }
                 else{
@@ -226,7 +248,7 @@ var ItemInfo = function(itemType)
             tableObject.appendChild(trObject);
         }
         //특성2 -> 목걸이
-        if(this.itemType == "200010")
+        if(itemInfo.itemType == "200010")
         {
             var trObject = document.createElement("tr");
             var tdObject = document.createElement("td");
@@ -234,9 +256,14 @@ var ItemInfo = function(itemType)
             trObject.appendChild(tdObject);
             var tdObject = document.createElement("td");
             var statSelTag = document.createElement("select");
-            for(var i = 0 ; i < this.marketJson.marketAuction.marketMenuAuctionEtcList[1].marketMenuEtcOptionSubList.length; i++)
+            selectObj.setAttribute("class", "statType");
+            selectObj.onchange = function(event)
             {
-                var statusOptionData = this.marketJson.marketAuction.marketMenuAuctionEtcList[1].marketMenuEtcOptionSubList[i];
+                itemInfo.statType[1] = event.target.value;
+            }
+            for(var i = 0 ; i < itemInfo.marketJson.marketAuction.marketMenuAuctionEtcList[1].marketMenuEtcOptionSubList.length; i++)
+            {
+                var statusOptionData = itemInfo.marketJson.marketAuction.marketMenuAuctionEtcList[1].marketMenuEtcOptionSubList[i];
                 var optionObj = document.createElement("option");
                 optionObj.innerHTML = statusOptionData.text;
                 optionObj.value = statusOptionData.value;
@@ -244,9 +271,11 @@ var ItemInfo = function(itemType)
             }
             tdObject.appendChild(statSelTag);
             var inputObj = document.createElement("input");
+            inputObj.setAttribute("class", "statVal");
             inputObj.onkeydown = function(event)
             {
                 if (event.key >= 0 && event.key <= 9) {
+                    itemInfo.statVal[1] = event.target.value + event.key;
                     return true;
                 }
                 else{
@@ -258,7 +287,7 @@ var ItemInfo = function(itemType)
             tableObject.appendChild(trObject);
         }
         //디버프 -> 목걸이, 귀걸이, 반지, 돌
-        if(this.itemType == "200010" || this.itemType == "200020" || this.itemType == "200030" || this.itemType == "30000")
+        if(itemInfo.itemType == "200010" || itemInfo.itemType == "200020" || itemInfo.itemType == "200030" || itemInfo.itemType == "30000")
         {
             var trObject = document.createElement("tr");
             var tdObject = document.createElement("td");
@@ -266,6 +295,11 @@ var ItemInfo = function(itemType)
             trObject.appendChild(tdObject);
             var tdObject = document.createElement("td");
             var selectObj = document.createElement("select");
+            selectObj.setAttribute("class", "debuffType");
+            selectObj.onchange = function(event)
+            {
+                itemInfo.debuffType[0] = event.target.value;
+            }
             var optionObj = document.createElement("option");
             optionObj.value = "0";
             optionObj.innerHTML = "공격력 감소";
@@ -284,7 +318,12 @@ var ItemInfo = function(itemType)
             selectObj.appendChild(optionObj);
             tdObject.appendChild(selectObj);
             var selectObj = document.createElement("select");
-            switch (this.itemType) {
+            selectObj.setAttribute("class", "debuffVal");
+            selectObj.onchange = function(event)
+            {
+                itemInfo.debuffVal[0] = event.target.value;
+            }
+            switch (itemInfo.itemType) {
                 case "200010":
                 case "200020":
                 case "200030":
@@ -309,7 +348,7 @@ var ItemInfo = function(itemType)
             tableObject.appendChild(trObject);
         }
         //장비명 -> 목걸이, 귀걸이, 반지
-        if(this.itemType == "200010" || this.itemType == "200020" || this.itemType == "200030")
+        if(itemInfo.itemType == "200010" || itemInfo.itemType == "200020" || itemInfo.itemType == "200030")
         {
             var trObject = document.createElement("tr");
             var tdObject = document.createElement("td");
@@ -322,36 +361,51 @@ var ItemInfo = function(itemType)
             tableObject.appendChild(trObject);
         }
 
-        this.itemObject = tableObject;
+        itemInfo.itemObject = tableObject;
         if(insertDiv)
         {
-            insertDiv.appendChild(this.itemObject);
+            insertDiv.appendChild(itemInfo.itemObject);
         }
 
-        this.classType = classType;
-        this.makeEngvSelTag();
+        itemInfo.classType = classType;
+        itemInfo.makeEngSelTag();
+        
+        for(var i = 0; i < $(itemInfo.itemObject).find(".engType").length; i++)
+        {
+            itemInfo.engType[i] = $(itemInfo.itemObject).find(".engType")[i].value;
+            itemInfo.engVal[i] = $(itemInfo.itemObject).find(".engVal")[i].value;
+        }
+        for(var i = 0; i < $(itemInfo.itemObject).find(".statType").length; i++)
+        {
+            itemInfo.statType[i] = $(itemInfo.itemObject).find(".statType")[i].value;
+            itemInfo.statVal[i] = $(itemInfo.itemObject).find(".statVal")[i].value == "" ? "0" : $(itemInfo.itemObject).find(".statVal")[i].value;
+        }
+        for(var i = 0; i < $(itemInfo.itemObject).find(".debuffType").length; i++)
+        {
+            itemInfo.debuffType[i] = $(itemInfo.itemObject).find(".debuffType")[i].value;
+            itemInfo.debuffVal[i] = $(itemInfo.itemObject).find(".debuffVal")[i].value;
+        }
     }
 
-    this.makeEngvSelTag = function()
-    {
-        debugger        
-        $(this.itemObject).find(".engraving").html("");
-        for(var i = 0 ; i < this.marketJson.marketAuction.marketMenuAuctionEtcList[2].marketMenuEtcOptionSubList.length; i++)
+    itemInfo.makeEngSelTag = function()
+    {     
+        $(itemInfo.itemObject).find(".engType").html("");
+        for(var i = 0 ; i < itemInfo.marketJson.marketAuction.marketMenuAuctionEtcList[2].marketMenuEtcOptionSubList.length; i++)
         {
-            var engravingData = this.marketJson.marketAuction.marketMenuAuctionEtcList[2].marketMenuEtcOptionSubList[i];
-            if(engravingData.class == 0 || engravingData.class == this.classType)
+            var engravingData = itemInfo.marketJson.marketAuction.marketMenuAuctionEtcList[2].marketMenuEtcOptionSubList[i];
+            if(engravingData.class == 0 || engravingData.class == itemInfo.classType)
             {
                 var optionObj = document.createElement("option");
                 optionObj.innerHTML = engravingData.text;
                 optionObj.value = engravingData.value;
-                $(this.itemObject).find(".engraving").append(optionObj);
+                $(itemInfo.itemObject).find(".engType").append(optionObj);
             }
         }
 
-        for (var i = 0; i < $(this.itemObject).find(".engraving").length; i++) 
+        for (var i = 0; i < $(itemInfo.itemObject).find(".engType").length; i++) 
         {
             //여러개의 셀렉트 박스가 존재하기 때문에 $('.select').eq(i) 로 하나씩 가져온다.
-            var oOptionList = $(this.itemObject).find(".engraving").eq(i).find('option');
+            var oOptionList = $(itemInfo.itemObject).find(".engType").eq(i).find('option');
             oOptionList.sort(function (a, b) {
                 if (a.text > b.text) return 1;
                 else if (a.text < b.text) return -1;
@@ -361,13 +415,29 @@ var ItemInfo = function(itemType)
                     else return 0;
                 }
             });
-            $(this.itemObject).find(".engraving").eq(i).html(oOptionList);
-            $(this.itemObject).find(".engraving").eq(i).val(0);
+            $(itemInfo.itemObject).find(".engType").eq(i).html(oOptionList);
+            $(itemInfo.itemObject).find(".engType").eq(i).val(0);
         }
     }
 
-    this.changeClass = function(classType){
-        this.classType = classType;
-        this.makeEngvSelTag();
+    itemInfo.changeClass = function(classType){
+        itemInfo.classType = classType;
+        itemInfo.makeEngSelTag();
+        
+        for(var i = 0; i < $(itemInfo.itemObject).find(".engType").length; i++)
+        {
+            itemInfo.engType[i] = $(itemInfo.itemObject).find(".engType")[i].value;
+            itemInfo.engVal[i] = $(itemInfo.itemObject).find(".engVal")[i].value;
+        }
+        for(var i = 0; i < $(itemInfo.itemObject).find(".statType").length; i++)
+        {
+            itemInfo.statType[i] = $(itemInfo.itemObject).find(".statType")[i].value;
+            itemInfo.statVal[i] = $(itemInfo.itemObject).find(".statVal")[i].value == "" ? "0" : $(itemInfo.itemObject).find(".statVal")[i].value;
+        }
+        for(var i = 0; i < $(itemInfo.itemObject).find(".debuffType").length; i++)
+        {
+            itemInfo.debuffType[i] = $(itemInfo.itemObject).find(".debuffType")[i].value;
+            itemInfo.debuffVal[i] = $(itemInfo.itemObject).find(".debuffVal")[i].value;
+        }
     }
 }

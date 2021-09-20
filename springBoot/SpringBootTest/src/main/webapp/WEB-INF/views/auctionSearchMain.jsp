@@ -20,10 +20,9 @@
             var marketJson = "";
 
             //장비중 데이터
-            var statEngv = new Map();
-            var statOpt = new Map();
-            var statDebuff = new Map();
-
+            var equipEng = new Map();
+            var equipStat = new Map();
+            var equipDebuff = new Map();
 
             //아이템/각인 데이터
             var necklaceItem = new ItemInfo("200010");
@@ -34,19 +33,16 @@
             var stoneItem = new ItemInfo("30000");
             var engOpt = new ItemInfo("00000");
 
-
-
-
             //목표치 데이터
-            var goalEngv = new Map();
+            var goalEng = new Map();
             var goalOpt = new Map();
 
             //필요치 데이터
-            var needEngv = new Map();
+            var needEng = new Map();
             var needOpt = new Map();
 
             //검색 데이터            
-            var searchEngvData = new Array();
+            var searchEngData = new Array();
             var searchOptData = new Array();
 
             //결과 데이터
@@ -71,7 +67,6 @@
                 var cookieText = escape(name) + '=' + escape(value);
                 document.cookie = cookieText;
             }
-
 
             //초기 경매장 데이터 init
             function getMarketData()
@@ -100,49 +95,6 @@
                     $(".selClass").append(optionObj);
                 }
                 
-                $(".statusOption").html("");
-                for(var i = 0 ; i < marketJson.marketAuction.marketMenuAuctionEtcList[1].marketMenuEtcOptionSubList.length; i++)
-                {
-                    var statusOptionData = marketJson.marketAuction.marketMenuAuctionEtcList[1].marketMenuEtcOptionSubList[i];
-                    var optionObj = document.createElement("option");
-                    optionObj.innerHTML = statusOptionData.text;
-                    optionObj.value = statusOptionData.value;
-                    $(".statusOption").append(optionObj);
-                }
-                initClassData();
-            }
-            function initClassData()
-            {
-                $(".engraving").html("");
-                for(var i = 0 ; i < marketJson.marketAuction.marketMenuAuctionEtcList[2].marketMenuEtcOptionSubList.length; i++)
-                {
-                    var engravingData = marketJson.marketAuction.marketMenuAuctionEtcList[2].marketMenuEtcOptionSubList[i];
-                    if(engravingData.class == 0 || engravingData.class == $(".selClass").val())
-                    {
-                        var optionObj = document.createElement("option");
-                        optionObj.innerHTML = engravingData.text;
-                        optionObj.value = engravingData.value;
-                        $(".engraving").append(optionObj);
-                    }
-                }
-
-                for (var i = 0; i < $(".engraving").length; i++) 
-                {
-                    //여러개의 셀렉트 박스가 존재하기 때문에 $('.select').eq(i) 로 하나씩 가져온다.
-                    var oOptionList = $(".engraving").eq(i).find('option');
-                    oOptionList.sort(function (a, b) {
-                        if (a.text > b.text) return 1;
-                        else if (a.text < b.text) return -1;
-                        else {
-                            if (a.value > b.value) return 1;
-                            else if (a.value < b.value) return -1;
-                            else return 0;
-                        }
-                    });
-                    $(".engraving").eq(i).html(oOptionList);
-                    $(".engraving").eq(i).val(0);
-                }
-
                 //아이템 목록 추가
                 let equipDiv = document.getElementById("equipList");
                 stoneItem.makeItemTag(marketJson, $(".selClass").val(), equipDiv);
@@ -153,106 +105,105 @@
                 ringItem1.makeItemTag(marketJson, $(".selClass").val(), equipDiv);
                 ringItem2.makeItemTag(marketJson, $(".selClass").val(), equipDiv);
             }
-            
-            function toggleStatus(obj)
+            function initClassData()
             {
-                var rowType = $(obj).closest("tr").attr("rowType");
-                if($(obj).is(":checked"))
-                {
-                    $("tr[rowType=" + rowType + "]").find("select").attr("disabled", false);
-                    $("tr[rowType=" + rowType + "]").find("input[type=text]").attr("disabled", false);
-                }
-                else{
-                    $("tr[rowType=" + rowType + "]").find("select").attr("disabled", true);
-                    $("tr[rowType=" + rowType + "]").find("input[type=text]").attr("disabled", true);
-                }
+                stoneItem.changeClass($(".selClass").val());
+                engOpt.changeClass($(".selClass").val());
+                necklaceItem.changeClass($(".selClass").val());
+                earringItem1.changeClass($(".selClass").val());
+                earringItem2.changeClass($(".selClass").val());
+                ringItem1.changeClass($(".selClass").val());
+                ringItem2.changeClass($(".selClass").val());
             }
-
+            
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             function calcCurStatus()
             {
-                //1. 각인 engv
+                //1. 각인 eng
                 //2. 특성 statOpt
                 //3. 디버프
-                statEngv = new Map();
-                addStatEngv("stone", statEngv);
-                addStatEngv("ringEngv", statEngv);
-                addStatEngv("necklace", statEngv);
-                addStatEngv("earring1", statEngv);
-                addStatEngv("earring2", statEngv);
-                addStatEngv("ring1", statEngv);
-                addStatEngv("ring2", statEngv);
+                equipEng = new Map();
+                addEngData(equipEng, stoneItem);
+                addEngData(equipEng, engOpt);
+                addEngData(equipEng, necklaceItem);
+                addEngData(equipEng, earringItem1);
+                addEngData(equipEng, earringItem2);
+                addEngData(equipEng, ringItem1);
+                addEngData(equipEng, ringItem2);
 
-                statOpt = new Map();
-                addStatOpt("necklace", statOpt);
-                addStatOpt("earring1", statOpt);
-                addStatOpt("earring2", statOpt);
-                addStatOpt("ring1", statOpt);
-                addStatOpt("ring2", statOpt);
+                equipStat = new Map();
+                addStatData(equipStat, necklaceItem);
+                addStatData(equipStat, earringItem1);
+                addStatData(equipStat, earringItem2);
+                addStatData(equipStat, ringItem1);
+                addStatData(equipStat, ringItem2);
 
-                statDebuff = new Map();
-                addStatDebuff("stone", statDebuff);
-                addStatDebuff("necklace", statDebuff);
-                addStatDebuff("earring1", statDebuff);
-                addStatDebuff("earring2", statDebuff);
-                addStatDebuff("ring1", statDebuff);
-                addStatDebuff("ring2", statDebuff);
+                equipDebuff = new Map();
+                addDebuffData(equipDebuff, stoneItem);
+                addDebuffData(equipDebuff, necklaceItem);
+                addDebuffData(equipDebuff, earringItem1);
+                addDebuffData(equipDebuff, earringItem2);
+                addDebuffData(equipDebuff, ringItem1);
+                addDebuffData(equipDebuff, ringItem2);
 
-                makeCurStatus(statEngv, statOpt, statDebuff)
+                makeCurStatus(statEng, statOpt, statDebuff)
                 makeGoalStatus();
                 makeGoalNeeds();
             }
 
-            function addStatEngv(rowName, mapObj) {
-                if ($("tr[rowType=" + rowName + "]").find("input[type=checkbox]").is(":checked")) {
-                    $("tr[rowType=" + rowName + "]").each(function (idx, item) {
-                        if ($(item).find(".engraving").length > 0) {
-                            if (mapObj[$(item).find(".engraving").val()] == null) {
-                                mapObj[$(item).find(".engraving").val()] = Number($(item).find(".engravingStatus").val());
-                            }
-                            else {
-                                mapObj[$(item).find(".engraving").val()] = mapObj[$(item).find(".engraving").val()] + Number($(item).find(".engravingStatus").val());
-                            }
+            function addEngData(mapObj, itemData) {
+                if(itemData.activated)
+                {
+                    for(var i = 0 ; i < itemData.engType; i++)
+                    {
+                        if (mapObj[itemData.engType[i]] == null) {
+                            mapObj[itemData.engType[i]] = Number(itemData.engVal[i]);
                         }
-                    });
+                        else {
+                            mapObj[itemData.engType[i]] = Number(mapObj[itemData.engType[i]]) + Number(itemData.engVal[i]);
+                        }
+                    }
+                }
+            }
+            function addStatData(mapObj, itemData) {
+                if(itemData.activated)
+                {
+                    for(var i = 0 ; i < itemData.statType; i++)
+                    {
+                        if (mapObj[itemData.statType[i]] == null) {
+                            mapObj[itemData.statType[i]] = Number(itemData.statVal[i]);
+                        }
+                        else {
+                            mapObj[itemData.statType[i]] = Number(mapObj[itemData.statType[i]]) + Number(itemData.statVal[i]);
+                        }
+                    }
+                }
+            }
+            function addDebuffData(mapObj, itemData) {
+                if(itemData.activated)
+                {
+                    for(var i = 0 ; i < itemData.debuffType; i++)
+                    {
+                        if (mapObj[itemData.debuffType[i]] == null) {
+                            mapObj[itemData.debuffType[i]] = Number(itemData.debuffVal[i]);
+                        }
+                        else {
+                            mapObj[itemData.debuffType[i]] = Number(mapObj[itemData.debuffType[i]]) + Number(itemData.debuffVal[i]);
+                        }
+                    }
                 }
             }
 
-            function addStatOpt(rowName, mapObj) {
-                if ($("tr[rowType=" + rowName + "]").find("input[type=checkbox]").is(":checked")) {
-                    $("tr[rowType=" + rowName + "]").each(function (idx, item) {
-                        if ($(item).find(".statusOption").length > 0) {
-                            if (mapObj[$(item).find(".statusOption").val()] == null) {
-                                mapObj[$(item).find(".statusOption").val()] = Number($(item).find(".statusOptionDegree").val());
-                            }
-                            else {
-                                mapObj[$(item).find(".statusOption").val()] = mapObj[$(item).find(".statusOption").val()] + Number($(item).find(".statusOptionDegree").val());
-                            }
-                        }
-                    });
-                }
-            }
+            
 
-            function addStatDebuff(rowName, mapObj) {
-                if ($("tr[rowType=" + rowName + "]").find("input[type=checkbox]").is(":checked")) {
-                    $("tr[rowType=" + rowName + "]").each(function (idx, item) {
-                        if ($(item).find(".debuff").length > 0) {
-                            if (mapObj[$(item).find(".debuff").val()] == null) {
-                                mapObj[$(item).find(".debuff").val()] = Number($(item).find(".debuffStatus").val());
-                            }
-                            else {
-                                mapObj[$(item).find(".debuff").val()] = mapObj[$(item).find(".debuff").val()] + Number($(item).find(".debuffStatus").val());
-                            }
-                        }
-                    });
-                }
-            }
+
 
             function makeCurStatus(engMap, optMap, debuffMap)
             {
                 var tableObj = document.createElement("table");
-                var engvJson = marketJson.marketAuction.marketMenuAuctionEtcList[2].marketMenuEtcOptionSubList;
+                var engJson = marketJson.marketAuction.marketMenuAuctionEtcList[2].marketMenuEtcOptionSubList;
                 var num = 0;
-                for(item of engvJson)
+                for(item of engJson)
                 {
                     if(engMap[item.value])
                     {
@@ -320,13 +271,13 @@
 
             function makeGoalStatus()
             {
-                goalEngv = new Map();
-                addStatEngv("goalEngv1", goalEngv);
-                addStatEngv("goalEngv2", goalEngv);
-                addStatEngv("goalEngv3", goalEngv);
-                addStatEngv("goalEngv4", goalEngv);
-                addStatEngv("goalEngv5", goalEngv);
-                addStatEngv("goalEngv6", goalEngv);
+                goalEng = new Map();
+                addStatEng("goalEng1", goalEng);
+                addStatEng("goalEng2", goalEng);
+                addStatEng("goalEng3", goalEng);
+                addStatEng("goalEng4", goalEng);
+                addStatEng("goalEng5", goalEng);
+                addStatEng("goalEng6", goalEng);
 
                 goalOpt = new Map();
                 addStatOpt("goalStat1", goalOpt);
@@ -336,16 +287,16 @@
 
             function makeGoalNeeds(){                
                 var tableObj = document.createElement("table");
-                var engvJson = marketJson.marketAuction.marketMenuAuctionEtcList[2].marketMenuEtcOptionSubList;
+                var engJson = marketJson.marketAuction.marketMenuAuctionEtcList[2].marketMenuEtcOptionSubList;
                 var num = 0;
-                needEngv = new Map();
-                searchEngvData = new Array();
-                for(item of engvJson)
+                needEng = new Map();
+                searchEngData = new Array();
+                for(item of engJson)
                 {
-                    if(goalEngv[item.value])
+                    if(goalEng[item.value])
                     {
-                        var statVal = statEngv[item.value]!=null?Number(statEngv[item.value]):0;
-                        if(statVal > Number(goalEngv[item.value]))
+                        var statVal = statEng[item.value]!=null?Number(statEng[item.value]):0;
+                        if(statVal > Number(goalEng[item.value]))
                         {
                             continue;
                         }
@@ -355,9 +306,9 @@
                         thObj.innerHTML = "각인" + num;
                         trObj.appendChild(thObj);
                         var tdObj = document.createElement("td");
-                        tdObj.innerHTML = item.text + " " + String(Number(goalEngv[item.value]) - statVal);
-                        needEngv[item.value] = Number(goalEngv[item.value]) - statVal;
-                        searchEngvData.push(item.value);
+                        tdObj.innerHTML = item.text + " " + String(Number(goalEng[item.value]) - statVal);
+                        needEng[item.value] = Number(goalEng[item.value]) - statVal;
+                        searchEngData.push(item.value);
                         trObj.appendChild(tdObj);
                         tableObj.appendChild(trObj);
                     }
@@ -398,11 +349,11 @@
             {
                 setCookie("suat", $("#suatCookie").val());                
                 //목걸이
-                necklaceAuctionList.getAuctionData($("#suatCookie").val(), "200010", searchEngvData, searchOptData, document.getElementById("auctionList"));
+                necklaceAuctionList.getAuctionData($("#suatCookie").val(), "200010", searchEngData, searchOptData, document.getElementById("auctionList"));
                 //귀걸이
-                earringAuctionList.getAuctionData($("#suatCookie").val(), "200020", searchEngvData, searchOptData, document.getElementById("auctionList"));
+                earringAuctionList.getAuctionData($("#suatCookie").val(), "200020", searchEngData, searchOptData, document.getElementById("auctionList"));
                 //반지
-                ringAuctionList.getAuctionData($("#suatCookie").val(), "200030", searchEngvData, searchOptData, document.getElementById("auctionList"));
+                ringAuctionList.getAuctionData($("#suatCookie").val(), "200030", searchEngData, searchOptData, document.getElementById("auctionList"));
             }
 
         </script>
@@ -441,11 +392,11 @@
                 </div>
             </div>
             <div style="display:inline-block; vertical-align:top;">
-                <div style="margin-top:10px;">현상태</div>
+                <div style="margin-top:10px;">현상태 종합</div>
                 <div id="curStatus"></div>
                 <div style="margin-top:30px;">목표치</div>
                 <table>
-                    <tr rowType="goalEngv1">                        
+                    <tr rowType="goalEng1">                        
                         <td>
                             <input type="checkbox" onclick="toggleStatus(this);" checked="checked">
                         </td>
@@ -464,7 +415,7 @@
                             </select>
                         </td>
                     </tr>
-                    <tr rowType="goalEngv2">                        
+                    <tr rowType="goalEng2">                        
                         <td>
                             <input type="checkbox" onclick="toggleStatus(this);" checked="checked">
                         </td>
@@ -483,7 +434,7 @@
                             </select>
                         </td>
                     </tr>
-                    <tr rowType="goalEngv3">                        
+                    <tr rowType="goalEng3">                        
                         <td>
                             <input type="checkbox" onclick="toggleStatus(this);" checked="checked">
                         </td>
@@ -502,7 +453,7 @@
                             </select>
                         </td>
                     </tr>
-                    <tr rowType="goalEngv4">                        
+                    <tr rowType="goalEng4">                        
                         <td>
                             <input type="checkbox" onclick="toggleStatus(this);" checked="checked">
                         </td>
@@ -521,7 +472,7 @@
                             </select>
                         </td>
                     </tr>
-                    <tr rowType="goalEngv5">                        
+                    <tr rowType="goalEng5">                        
                         <td>
                             <input type="checkbox" onclick="toggleStatus(this);" checked="checked">
                         </td>
@@ -540,7 +491,7 @@
                             </select>
                         </td>
                     </tr>
-                    <tr rowType="goalEngv6">                        
+                    <tr rowType="goalEng6">                        
                         <td>
                             <input type="checkbox" onclick="toggleStatus(this);" checked="checked">
                         </td>
