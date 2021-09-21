@@ -15,7 +15,9 @@ var GoalInfo = function(type)
     {
         goalInfo.marketJson = marketJSON;
         var divObj = document.createElement("div");
+        divObj.style.fontSize = "9pt";
         var chkBoxObj = document.createElement("input");
+        chkBoxObj.style.marginRight = "5px";
         chkBoxObj.type = "checkbox";
         chkBoxObj.onclick = function(){
             if(chkBoxObj.checked)
@@ -30,11 +32,14 @@ var GoalInfo = function(type)
                 $(goalInfo.goalObject).find("input").not("input[type=checkbox]").attr("disabled", true);
             }
         }
+        chkBoxObj.checked = true;
         divObj.appendChild(chkBoxObj);
         switch(goalInfo.type)
         {
             case "ENG":
                 var spanObj = document.createElement("span");
+                spanObj.style.marginRight = "5px";
+                spanObj.style.fontWeight = "bold";
                 spanObj.innerHTML = "각인";
                 divObj.appendChild(spanObj);
                 var selectObj = document.createElement("select");
@@ -46,6 +51,12 @@ var GoalInfo = function(type)
                 divObj.appendChild(selectObj);
                 var selectObj = document.createElement("select");
                 selectObj.setAttribute("class", "engVal");
+                for (var i = 0; i < 16; i=i+3) {
+                    var optionObj = document.createElement("option");
+                    optionObj.value = i;
+                    optionObj.innerHTML = i;
+                    selectObj.appendChild(optionObj);
+                }
                 selectObj.onchange = function(event)
                 {
                     goalInfo.goalVal = event.target.value;
@@ -54,6 +65,8 @@ var GoalInfo = function(type)
                 break;
             case "STAT":
                 var spanObj = document.createElement("span");
+                spanObj.style.marginRight = "5px";
+                spanObj.style.fontWeight = "bold";
                 spanObj.innerHTML = "특성";
                 divObj.appendChild(spanObj);
                 var selectObj = document.createElement("select");

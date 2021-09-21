@@ -4,9 +4,8 @@
 <%
 	SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMddhhmmssSSS");
 %>
-    <!DOCTYPE html>
-    <html>
-
+<!DOCTYPE html>
+<html>
     <head>
         <meta charset="UTF-8">
         <title></title>
@@ -36,7 +35,7 @@
 
             //목표치 데이터
             var goalEng = new Map();
-            var goalOpt = new Map();
+            var goalStat = new Map();
 
             //목표치 속성 데이터
             var goalEng1 = new GoalInfo("ENG");
@@ -119,14 +118,14 @@
 
                 //목표치 목록 추가
                 let goalDiv = document.getElementById("goalList");
-                goalEng.makeGoalTag(marketJson, $(".selClass").val(), goalDiv);
-                // goalEng2 = new GoalInfo("ENG");
-                // goalEng3 = new GoalInfo("ENG");
-                // goalEng4 = new GoalInfo("ENG");
-                // goalEng5 = new GoalInfo("ENG");
-                // goalEng6 = new GoalInfo("ENG");
-                // goalStat1 = new GoalInfo("STAT");
-                // goalStat2 = new GoalInfo("STAT");
+                goalEng1.makeGoalTag(marketJson, $(".selClass").val(), goalDiv);
+                goalEng2.makeGoalTag(marketJson, $(".selClass").val(), goalDiv);
+                goalEng3.makeGoalTag(marketJson, $(".selClass").val(), goalDiv);
+                goalEng4.makeGoalTag(marketJson, $(".selClass").val(), goalDiv);
+                goalEng5.makeGoalTag(marketJson, $(".selClass").val(), goalDiv);
+                goalEng6.makeGoalTag(marketJson, $(".selClass").val(), goalDiv);
+                goalStat1.makeGoalTag(marketJson, $(".selClass").val(), goalDiv);
+                goalStat2.makeGoalTag(marketJson, $(".selClass").val(), goalDiv);
             }
             function changeClassData()
             {
@@ -137,6 +136,15 @@
                 earringItem2.changeClass($(".selClass").val());
                 ringItem1.changeClass($(".selClass").val());
                 ringItem2.changeClass($(".selClass").val());
+                
+                goalEng1.changeClass($(".selClass").val());
+                goalEng2.changeClass($(".selClass").val());
+                goalEng3.changeClass($(".selClass").val());
+                goalEng4.changeClass($(".selClass").val());
+                goalEng5.changeClass($(".selClass").val());
+                goalEng6.changeClass($(".selClass").val());
+                goalStat1.changeClass($(".selClass").val());
+                goalStat2.changeClass($(".selClass").val());
             }
             
             function calcCurStatus()
@@ -169,8 +177,20 @@
                 addDebuffData(equipDebuff, ringItem2);
 
                 makeCurStatus(equipEng, equipStat, equipDebuff)
-                //makeGoalStatus();
-                //makeGoalNeeds();
+
+
+                totalGoalEng = new Map();
+                addGoalData(totalGoalEng, goalEng1);
+                addGoalData(totalGoalEng, goalEng2);
+                addGoalData(totalGoalEng, goalEng3);
+                addGoalData(totalGoalEng, goalEng4);
+                addGoalData(totalGoalEng, goalEng5);
+                addGoalData(totalGoalEng, goalEng6);
+
+                totalGoalStat = new Map();
+                addGoalData(totalGoalEng, goalStat1);
+                addGoalData(totalGoalEng, goalStat2);
+                makeGoalNeeds();
             }
 
             function addEngData(mapObj, itemData) {
@@ -295,20 +315,20 @@
                 $("#curStatus").append(tableObj);
             }
 
-            function makeGoalStatus()
-            {
-                goalEng = new Map();
-                addStatEng("goalEng1", goalEng);
-                addStatEng("goalEng2", goalEng);
-                addStatEng("goalEng3", goalEng);
-                addStatEng("goalEng4", goalEng);
-                addStatEng("goalEng5", goalEng);
-                addStatEng("goalEng6", goalEng);
-
-                goalOpt = new Map();
-                addStatOpt("goalStat1", goalOpt);
-                addStatOpt("goalStat2", goalOpt);
-                addStatOpt("goalStat3", goalOpt);
+            function addGoalData(mapObj, goalData)
+            {                
+                if(goalData.activated)
+                {
+                    if(Number(goalData.goalVal) > 0)
+                    {
+                        if (mapObj[goalData.goalType] == null) {
+                            mapObj[goalData.goalType] = Number(goalData.goalVal);
+                        }
+                        else {
+                            mapObj[goalData.goalType] = Number(mapObj[goalData.goalType]) + Number(goalData.goalVal);
+                        }
+                    }
+                }
             }
 
             function makeGoalNeeds(){                
@@ -346,10 +366,10 @@
                 searchOptData = new Array();
                 for(item of optJson)
                 {
-                    if(goalOpt[item.value])
+                    if(goalStat[item.value])
                     {
                         var statVal = statOpt[item.value]!=null?Number(statOpt[item.value]):0;
-                        if(statVal > Number(goalOpt[item.value]))
+                        if(statVal > Number(goalStat[item.value]))
                         {
                             continue;
                         }
@@ -359,8 +379,8 @@
                         thObj.innerHTML = "특성" + num;
                         trObj.appendChild(thObj);
                         var tdObj = document.createElement("td");
-                        tdObj.innerHTML = item.text + " " + String(Number(goalOpt[item.value]) - statVal);
-                        needOpt[item.value] = Number(goalOpt[item.value]) - statVal;
+                        tdObj.innerHTML = item.text + " " + String(Number(goalStat[item.value]) - statVal);
+                        needOpt[item.value] = Number(goalStat[item.value]) - statVal;
                         searchOptData.push(item.value);
                         trObj.appendChild(tdObj);
                         tableObj.appendChild(trObj);
@@ -384,7 +404,6 @@
 
         </script>
     </head>
-
     <body>
         <div>쿠키 : <input type="text" id="suatCookie" style="width:300px;"/></div>
         stove 로그인 후 디버깅 창에 아래 구문 실행 후 쿠키 확인
@@ -414,174 +433,13 @@
             <div style="display:inline-block; vertical-align:top;width:calc(100% / 3)">
                 <div>현상태</div>
                 <div id="equipList">
-                    
                 </div>
             </div>
             <div style="display:inline-block; vertical-align:top;">
                 <div style="margin-top:10px;">현상태 종합</div>
                 <div id="curStatus"></div>
                 <div style="margin-top:30px;">목표치</div>
-                <table>
-                    <tr rowType="goalEng1">                        
-                        <td>
-                            <input type="checkbox" onclick="toggleStatus(this);" checked="checked">
-                        </td>
-                        <th>
-                            각인1
-                        </th>
-                        <td>
-                            <select class="engraving">
-                            </select>
-                        </td>
-                        <td>
-                            <select class="engravingStatus">
-                                <option value="5">5</option>
-                                <option value="10">10</option>
-                                <option value="15">15</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr rowType="goalEng2">                        
-                        <td>
-                            <input type="checkbox" onclick="toggleStatus(this);" checked="checked">
-                        </td>
-                        <th>
-                            각인2
-                        </th>
-                        <td>
-                            <select class="engraving">
-                            </select>
-                        </td>
-                        <td>
-                            <select class="engravingStatus">
-                                <option value="5">5</option>
-                                <option value="10">10</option>
-                                <option value="15">15</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr rowType="goalEng3">                        
-                        <td>
-                            <input type="checkbox" onclick="toggleStatus(this);" checked="checked">
-                        </td>
-                        <th>
-                            각인3
-                        </th>
-                        <td>
-                            <select class="engraving">
-                            </select>
-                        </td>
-                        <td>
-                            <select class="engravingStatus">
-                                <option value="5">5</option>
-                                <option value="10">10</option>
-                                <option value="15">15</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr rowType="goalEng4">                        
-                        <td>
-                            <input type="checkbox" onclick="toggleStatus(this);" checked="checked">
-                        </td>
-                        <th>
-                            각인4
-                        </th>
-                        <td>
-                            <select class="engraving">
-                            </select>
-                        </td>
-                        <td>
-                            <select class="engravingStatus">
-                                <option value="5">5</option>
-                                <option value="10">10</option>
-                                <option value="15">15</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr rowType="goalEng5">                        
-                        <td>
-                            <input type="checkbox" onclick="toggleStatus(this);" checked="checked">
-                        </td>
-                        <th>
-                            각인5
-                        </th>
-                        <td>
-                            <select class="engraving">
-                            </select>
-                        </td>
-                        <td>
-                            <select class="engravingStatus">
-                                <option value="5">5</option>
-                                <option value="10">10</option>
-                                <option value="15">15</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr rowType="goalEng6">                        
-                        <td>
-                            <input type="checkbox" onclick="toggleStatus(this);" checked="checked">
-                        </td>
-                        <th>
-                            각인6
-                        </th>
-                        <td>
-                            <select class="engraving">
-                            </select>
-                        </td>
-                        <td>
-                            <select class="engravingStatus">
-                                <option value="5">5</option>
-                                <option value="10">10</option>
-                                <option value="15">15</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr rowType="goalStat1">                        
-                        <td>
-                            <input type="checkbox" onclick="toggleStatus(this);" checked="checked">
-                        </td>
-                        <th>
-                            특성1
-                        </th>
-                        <td>
-                            <select class="statusOption">
-                            </select>
-                        </td>
-                        <td>
-                            <input type="text"  class="statusOptionDegree"/>
-                        </td>
-                    </tr>
-                    <tr rowType="goalStat2">                        
-                        <td>
-                            <input type="checkbox" onclick="toggleStatus(this);" checked="checked">
-                        </td>
-                        <th>
-                            특성2
-                        </th>
-                        <td>
-                            <select class="statusOption">
-                            </select>
-                        </td>
-                        <td>
-                            <input type="text"  class="statusOptionDegree"/>
-                        </td>
-                    </tr>
-                    <tr rowType="goalStat3">                        
-                        <td>
-                            <input type="checkbox" onclick="toggleStatus(this);" checked="checked">
-                        </td>
-                        <th>
-                            특성3
-                        </th>
-                        <td>
-                            <select class="statusOption">
-                            </select>
-                        </td>
-                        <td>
-                            <input type="text"  class="statusOptionDegree"/>
-                        </td>
-                    </tr>
-                </table>
+                <div id="goalList"></div>
                 <div style="margin-top:30px;">필요치</div>
                 <div id="goalNeeds"></div>
             </div>
@@ -589,5 +447,4 @@
         <div id="auctionList">
         </div>
     </body>
-
-    </html>
+</html>
