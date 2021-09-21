@@ -14,6 +14,7 @@
         <script type="text/javascript" src="/resources/jQuery/jquery-ui.min.js?ver=<%=fmt.format(new Date())%>"></script>
         <script type="text/javascript" src="/resources/js/AuctionList.js?ver=<%=fmt.format(new Date())%>"></script>
         <script type="text/javascript" src="/resources/js/ItemInfo.js?ver=<%=fmt.format(new Date())%>"></script>
+        <script type="text/javascript" src="/resources/js/GoalInfo.js?ver=<%=fmt.format(new Date())%>"></script>
         
         
         <script type="text/javascript">
@@ -36,6 +37,17 @@
             //목표치 데이터
             var goalEng = new Map();
             var goalOpt = new Map();
+
+            //목표치 속성 데이터
+            var goalEng1 = new GoalInfo("ENG");
+            var goalEng2 = new GoalInfo("ENG");
+            var goalEng3 = new GoalInfo("ENG");
+            var goalEng4 = new GoalInfo("ENG");
+            var goalEng5 = new GoalInfo("ENG");
+            var goalEng6 = new GoalInfo("ENG");
+            var goalStat1 = new GoalInfo("STAT");
+            var goalStat2 = new GoalInfo("STAT");
+
 
             //필요치 데이터
             var needEng = new Map();
@@ -104,8 +116,19 @@
                 earringItem2.makeItemTag(marketJson, $(".selClass").val(), equipDiv);
                 ringItem1.makeItemTag(marketJson, $(".selClass").val(), equipDiv);
                 ringItem2.makeItemTag(marketJson, $(".selClass").val(), equipDiv);
+
+                //목표치 목록 추가
+                let goalDiv = document.getElementById("goalList");
+                goalEng.makeGoalTag(marketJson, $(".selClass").val(), goalDiv);
+                // goalEng2 = new GoalInfo("ENG");
+                // goalEng3 = new GoalInfo("ENG");
+                // goalEng4 = new GoalInfo("ENG");
+                // goalEng5 = new GoalInfo("ENG");
+                // goalEng6 = new GoalInfo("ENG");
+                // goalStat1 = new GoalInfo("STAT");
+                // goalStat2 = new GoalInfo("STAT");
             }
-            function initClassData()
+            function changeClassData()
             {
                 stoneItem.changeClass($(".selClass").val());
                 engOpt.changeClass($(".selClass").val());
@@ -116,7 +139,6 @@
                 ringItem2.changeClass($(".selClass").val());
             }
             
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             function calcCurStatus()
             {
                 //1. 각인 eng
@@ -146,21 +168,24 @@
                 addDebuffData(equipDebuff, ringItem1);
                 addDebuffData(equipDebuff, ringItem2);
 
-                makeCurStatus(statEng, statOpt, statDebuff)
-                makeGoalStatus();
-                makeGoalNeeds();
+                makeCurStatus(equipEng, equipStat, equipDebuff)
+                //makeGoalStatus();
+                //makeGoalNeeds();
             }
 
             function addEngData(mapObj, itemData) {
                 if(itemData.activated)
                 {
-                    for(var i = 0 ; i < itemData.engType; i++)
+                    for(var i = 0 ; i < itemData.engType.length; i++)
                     {
-                        if (mapObj[itemData.engType[i]] == null) {
-                            mapObj[itemData.engType[i]] = Number(itemData.engVal[i]);
-                        }
-                        else {
-                            mapObj[itemData.engType[i]] = Number(mapObj[itemData.engType[i]]) + Number(itemData.engVal[i]);
+                        if(Number(itemData.engVal[i]) > 0)
+                        {
+                            if (mapObj[itemData.engType[i]] == null) {
+                                mapObj[itemData.engType[i]] = Number(itemData.engVal[i]);
+                            }
+                            else {
+                                mapObj[itemData.engType[i]] = Number(mapObj[itemData.engType[i]]) + Number(itemData.engVal[i]);
+                            }
                         }
                     }
                 }
@@ -168,13 +193,16 @@
             function addStatData(mapObj, itemData) {
                 if(itemData.activated)
                 {
-                    for(var i = 0 ; i < itemData.statType; i++)
+                    for(var i = 0 ; i < itemData.statType.length; i++)
                     {
-                        if (mapObj[itemData.statType[i]] == null) {
-                            mapObj[itemData.statType[i]] = Number(itemData.statVal[i]);
-                        }
-                        else {
-                            mapObj[itemData.statType[i]] = Number(mapObj[itemData.statType[i]]) + Number(itemData.statVal[i]);
+                        if(Number(itemData.statVal[i]) > 0)
+                        {
+                            if (mapObj[itemData.statType[i]] == null) {
+                                mapObj[itemData.statType[i]] = Number(itemData.statVal[i]);
+                            }
+                            else {
+                                mapObj[itemData.statType[i]] = Number(mapObj[itemData.statType[i]]) + Number(itemData.statVal[i]);
+                            }
                         }
                     }
                 }
@@ -182,23 +210,22 @@
             function addDebuffData(mapObj, itemData) {
                 if(itemData.activated)
                 {
-                    for(var i = 0 ; i < itemData.debuffType; i++)
+                    for(var i = 0 ; i < itemData.debuffType.length; i++)
                     {
-                        if (mapObj[itemData.debuffType[i]] == null) {
-                            mapObj[itemData.debuffType[i]] = Number(itemData.debuffVal[i]);
-                        }
-                        else {
-                            mapObj[itemData.debuffType[i]] = Number(mapObj[itemData.debuffType[i]]) + Number(itemData.debuffVal[i]);
+                        if(Number(itemData.debuffVal[i]) > 0)
+                        {
+                            if (mapObj[itemData.debuffType[i]] == null) {
+                                mapObj[itemData.debuffType[i]] = Number(itemData.debuffVal[i]);
+                            }
+                            else {
+                                mapObj[itemData.debuffType[i]] = Number(mapObj[itemData.debuffType[i]]) + Number(itemData.debuffVal[i]);
+                            }
                         }
                     }
                 }
             }
 
-            
-
-
-
-            function makeCurStatus(engMap, optMap, debuffMap)
+            function makeCurStatus(engMap, statMap, debuffMap)
             {
                 var tableObj = document.createElement("table");
                 var engJson = marketJson.marketAuction.marketMenuAuctionEtcList[2].marketMenuEtcOptionSubList;
@@ -223,7 +250,7 @@
                 num = 0;
                 for(item of optJson)
                 {
-                    if(optMap[item.value])
+                    if(statMap[item.value])
                     {
                         num++;
                         var trObj = document.createElement("tr");
@@ -231,7 +258,7 @@
                         thObj.innerHTML = "특성" + num;
                         trObj.appendChild(thObj);
                         var tdObj = document.createElement("td");
-                        tdObj.innerHTML = item.text + " " + optMap[item.value];
+                        tdObj.innerHTML = item.text + " " + statMap[item.value];
                         trObj.appendChild(tdObj);
                         tableObj.appendChild(trObj);
                     }
@@ -266,7 +293,6 @@
 
                 $("#curStatus").html("");
                 $("#curStatus").append(tableObj);
-
             }
 
             function makeGoalStatus()
@@ -379,7 +405,7 @@
         <div>장비 상태</div>
         <div>
             <span>클래스</span>
-            <select class="selClass" onchange="initClassData();">
+            <select class="selClass" onchange="changeClassData();">
             </select>
             <input type="button" value="계산" onclick="calcCurStatus();"/>
             <input type="button" value="상점검색" onclick="searchMarket();"/>

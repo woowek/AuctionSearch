@@ -20,12 +20,7 @@ var ItemInfo = function(itemType)
     //함수 구성
     //1. 전체태그 생성
     //2. 각인 태그 생성
-    //3. 특성 태그 생성
-    //4. 클래스 변경
-    //5. 각인 변경
-    //6. 각인 값 변경
-    //7. 특성 변경
-    //8. 특성 값 변경
+    //3. 클래스 변경
 
     itemInfo.makeItemTag = function(marketJSON, classType, insertDiv)
     {
@@ -362,13 +357,13 @@ var ItemInfo = function(itemType)
         }
 
         itemInfo.itemObject = tableObject;
+        itemInfo.classType = classType;
+        itemInfo.makeEngSelTag();
         if(insertDiv)
         {
             insertDiv.appendChild(itemInfo.itemObject);
         }
 
-        itemInfo.classType = classType;
-        itemInfo.makeEngSelTag();
         
         for(var i = 0; i < $(itemInfo.itemObject).find(".engType").length; i++)
         {
