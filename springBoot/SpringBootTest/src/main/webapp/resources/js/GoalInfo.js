@@ -18,6 +18,7 @@ var GoalInfo = function(type)
         divObj.style.fontSize = "9pt";
         var chkBoxObj = document.createElement("input");
         chkBoxObj.style.marginRight = "5px";
+        chkBoxObj.style.marginTop = "10px";
         chkBoxObj.type = "checkbox";
         chkBoxObj.onclick = function(){
             if(chkBoxObj.checked)
@@ -51,7 +52,7 @@ var GoalInfo = function(type)
                 divObj.appendChild(selectObj);
                 var selectObj = document.createElement("select");
                 selectObj.setAttribute("class", "engVal");
-                for (var i = 0; i < 16; i=i+3) {
+                for (var i = 0; i < 16; i=i+5) {
                     var optionObj = document.createElement("option");
                     optionObj.value = i;
                     optionObj.innerHTML = i;
@@ -62,6 +63,11 @@ var GoalInfo = function(type)
                     goalInfo.goalVal = event.target.value;
                 }
                 divObj.appendChild(selectObj);
+                goalInfo.goalObject = divObj;
+                goalInfo.classType = classType;
+                goalInfo.makeEngSelTag();
+                goalInfo.goalType = $(goalInfo.goalObject).find(".engType").val();
+                goalInfo.goalVal = $(goalInfo.goalObject).find(".engVal").val();
                 break;
             case "STAT":
                 var spanObj = document.createElement("span");
@@ -97,15 +103,16 @@ var GoalInfo = function(type)
                     }
                 }
                 divObj.appendChild(inputObj);
+                goalInfo.goalObject = divObj;
+                goalInfo.classType = classType;
+                goalInfo.goalType = $(goalInfo.goalObject).find(".statType").val();
+                goalInfo.goalVal = $(goalInfo.goalObject).find(".statVal").val();
                 break;
             default:
                 return;
                 break;
         }
 
-        goalInfo.goalObject = divObj;
-        goalInfo.classType = classType;
-        goalInfo.makeEngSelTag();
         if(insertDiv)
         {
             insertDiv.appendChild(goalInfo.goalObject);
@@ -149,7 +156,22 @@ var GoalInfo = function(type)
     goalInfo.changeClass = function(classType){
         goalInfo.classType = classType;
         goalInfo.makeEngSelTag();
-        goalInfo.goalType = "";
-        goalInfo.goalVal = "";
+        switch(goalInfo.type)
+        {
+            case "ENG":
+                $(goalInfo.goalObject).find(".engVal option").removeAttr("selected");
+                $(goalInfo.goalObject).find(".engVal option")[0].setAttribute("selected", "selected");
+                goalInfo.goalType = $(goalInfo.goalObject).find(".engType").val();
+                goalInfo.goalVal = $(goalInfo.goalObject).find(".engVal").val();
+                break;
+            case "STAT":
+                debugger
+                $(goalInfo.goalObject).find(".statType option").removeAttr("selected");
+                $(goalInfo.goalObject).find(".statType option")[0].setAttribute("selected", "selected");
+                $(goalInfo.goalObject).find(".statVal").val("");
+                goalInfo.goalType = $(goalInfo.goalObject).find(".statType").val();
+                goalInfo.goalVal = $(goalInfo.goalObject).find(".statVal").val();
+                break;
+        }
     }
 }

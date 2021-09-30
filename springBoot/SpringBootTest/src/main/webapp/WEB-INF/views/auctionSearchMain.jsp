@@ -4,8 +4,9 @@
 <%
 	SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMddhhmmssSSS");
 %>
-<!DOCTYPE html>
-<html>
+    <!DOCTYPE html>
+    <html>
+
     <head>
         <meta charset="UTF-8">
         <title></title>
@@ -34,8 +35,8 @@
             var engOpt = new ItemInfo("00000");
 
             //목표치 데이터
-            var goalEng = new Map();
-            var goalStat = new Map();
+            var totalGoalEng = new Map();
+            var totalGoalStat = new Map();
 
             //목표치 속성 데이터
             var goalEng1 = new GoalInfo("ENG");
@@ -46,6 +47,7 @@
             var goalEng6 = new GoalInfo("ENG");
             var goalStat1 = new GoalInfo("STAT");
             var goalStat2 = new GoalInfo("STAT");
+            var goalStat3 = new GoalInfo("STAT");
 
 
             //필요치 데이터
@@ -126,9 +128,9 @@
                 goalEng6.makeGoalTag(marketJson, $(".selClass").val(), goalDiv);
                 goalStat1.makeGoalTag(marketJson, $(".selClass").val(), goalDiv);
                 goalStat2.makeGoalTag(marketJson, $(".selClass").val(), goalDiv);
+                goalStat3.makeGoalTag(marketJson, $(".selClass").val(), goalDiv);
             }
-            function changeClassData()
-            {
+            function changeClassData() {
                 stoneItem.changeClass($(".selClass").val());
                 engOpt.changeClass($(".selClass").val());
                 necklaceItem.changeClass($(".selClass").val());
@@ -136,7 +138,7 @@
                 earringItem2.changeClass($(".selClass").val());
                 ringItem1.changeClass($(".selClass").val());
                 ringItem2.changeClass($(".selClass").val());
-                
+
                 goalEng1.changeClass($(".selClass").val());
                 goalEng2.changeClass($(".selClass").val());
                 goalEng3.changeClass($(".selClass").val());
@@ -145,6 +147,7 @@
                 goalEng6.changeClass($(".selClass").val());
                 goalStat1.changeClass($(".selClass").val());
                 goalStat2.changeClass($(".selClass").val());
+                goalStat3.changeClass($(".selClass").val());
             }
             
             function calcCurStatus()
@@ -176,21 +179,9 @@
                 addDebuffData(equipDebuff, ringItem1);
                 addDebuffData(equipDebuff, ringItem2);
 
-                makeCurStatus(equipEng, equipStat, equipDebuff)
-
-
-                totalGoalEng = new Map();
-                addGoalData(totalGoalEng, goalEng1);
-                addGoalData(totalGoalEng, goalEng2);
-                addGoalData(totalGoalEng, goalEng3);
-                addGoalData(totalGoalEng, goalEng4);
-                addGoalData(totalGoalEng, goalEng5);
-                addGoalData(totalGoalEng, goalEng6);
-
-                totalGoalStat = new Map();
-                addGoalData(totalGoalEng, goalStat1);
-                addGoalData(totalGoalEng, goalStat2);
-                makeGoalNeeds();
+                makeCurStatus(equipEng, equipStat, equipDebuff);
+                makeGoalStatus();
+                //makeGoalNeeds();
             }
 
             function addEngData(mapObj, itemData) {
@@ -315,21 +306,39 @@
                 $("#curStatus").append(tableObj);
             }
 
-            function addGoalData(mapObj, goalData)
-            {                
-                if(goalData.activated)
+            function makeGoalStatus()
+            {
+                totalGoalEng = new Map();
+                addGoalData(goalEng1, totalGoalEng);
+                addGoalData(goalEng2, totalGoalEng);
+                addGoalData(goalEng3, totalGoalEng);
+                addGoalData(goalEng4, totalGoalEng);
+                addGoalData(goalEng5, totalGoalEng);
+                addGoalData(goalEng6, totalGoalEng);
+
+                totalGoalStat = new Map();
+                addGoalData(goalStat1, totalGoalStat);
+                addGoalData(goalStat2, totalGoalStat);
+                addGoalData(goalStat3, totalGoalStat);
+                debugger
+            }
+
+            function addGoalData(goalInfo, totalGoal){
+                if(goalInfo.activated)
                 {
-                    if(Number(goalData.goalVal) > 0)
+                    if(Number(goalInfo.goalVal) > 0)
                     {
-                        if (mapObj[goalData.goalType] == null) {
-                            mapObj[goalData.goalType] = Number(goalData.goalVal);
+                        if(totalGoal[goalInfo.goalType])
+                        {
+                            totalGoal[goalInfo.goalType] = Number(totalGoal[goalInfo.goalType]) + Number(goalInfo.goalVal);
                         }
-                        else {
-                            mapObj[goalData.goalType] = Number(mapObj[goalData.goalType]) + Number(goalData.goalVal);
+                        else{
+                            totalGoal[goalInfo.goalType] = Number(goalInfo.goalVal);
                         }
                     }
                 }
             }
+
 
             function makeGoalNeeds(){                
                 var tableObj = document.createElement("table");
@@ -366,10 +375,10 @@
                 searchOptData = new Array();
                 for(item of optJson)
                 {
-                    if(goalStat[item.value])
+                    if(goalOpt[item.value])
                     {
                         var statVal = statOpt[item.value]!=null?Number(statOpt[item.value]):0;
-                        if(statVal > Number(goalStat[item.value]))
+                        if(statVal > Number(goalOpt[item.value]))
                         {
                             continue;
                         }
@@ -379,8 +388,8 @@
                         thObj.innerHTML = "특성" + num;
                         trObj.appendChild(thObj);
                         var tdObj = document.createElement("td");
-                        tdObj.innerHTML = item.text + " " + String(Number(goalStat[item.value]) - statVal);
-                        needOpt[item.value] = Number(goalStat[item.value]) - statVal;
+                        tdObj.innerHTML = item.text + " " + String(Number(goalOpt[item.value]) - statVal);
+                        needOpt[item.value] = Number(goalOpt[item.value]) - statVal;
                         searchOptData.push(item.value);
                         trObj.appendChild(tdObj);
                         tableObj.appendChild(trObj);
@@ -404,6 +413,7 @@
 
         </script>
     </head>
+
     <body>
         <div>쿠키 : <input type="text" id="suatCookie" style="width:300px;"/></div>
         stove 로그인 후 디버깅 창에 아래 구문 실행 후 쿠키 확인
@@ -432,14 +442,15 @@
         <div>
             <div style="display:inline-block; vertical-align:top;width:calc(100% / 3)">
                 <div>현상태</div>
-                <div id="equipList">
+                <div id="equipList">                    
                 </div>
             </div>
             <div style="display:inline-block; vertical-align:top;">
                 <div style="margin-top:10px;">현상태 종합</div>
                 <div id="curStatus"></div>
                 <div style="margin-top:30px;">목표치</div>
-                <div id="goalList"></div>
+                <div id="goalList">                    
+                </div>
                 <div style="margin-top:30px;">필요치</div>
                 <div id="goalNeeds"></div>
             </div>
@@ -447,4 +458,5 @@
         <div id="auctionList">
         </div>
     </body>
-</html>
+
+    </html>
