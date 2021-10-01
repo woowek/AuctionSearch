@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.auctionList.AuctionList;
+import com.example.demo.characterInfo.CharacterInfo;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -49,8 +50,6 @@ public class GetAuctionDataController {
 	//경매장 호출
 	@RequestMapping(value="/SearchAuctionItems", method = RequestMethod.POST)
 	public void searchAuctionItems(@RequestBody String body, HttpServletResponse response) throws Exception {
-		
-
 	    JSONParser jsonParse = new JSONParser();
 		JSONObject reqObj = (JSONObject)jsonParse.parse(body);
 
@@ -61,5 +60,18 @@ public class GetAuctionDataController {
 		response.setContentType("text/html; charset=UTF-8");
     	PrintWriter out = response.getWriter();
     	out.print(itemSearchList.itemListArr.toString());
+	}
+
+	//사용자 정보 검색
+	@RequestMapping(value="/SearchCharacterInfo", method = RequestMethod.POST)
+	public void searchCharacterInfo(@RequestBody String body, HttpServletResponse response) throws Exception {
+		JSONParser jsonParse = new JSONParser();
+		JSONObject reqObj = (JSONObject)jsonParse.parse(body);
+		//사용자 정보 검색  페이지
+		String reqUrl = "https://lostark.game.onstove.com/Profile/Character/" + (String)reqObj.get("characterName");
+		CharacterInfo characterInfo = new CharacterInfo(reqUrl);
+		response.setContentType("text/html; charset=UTF-8");
+    	PrintWriter out = response.getWriter();
+    	out.print("");
 	}
 }

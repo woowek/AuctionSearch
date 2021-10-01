@@ -52,7 +52,7 @@
 
             //필요치 데이터
             var needEng = new Map();
-            var needOpt = new Map();
+            var needStat = new Map();
 
             //검색 데이터            
             var searchEngData = new Array();
@@ -130,6 +130,7 @@
                 goalStat2.makeGoalTag(marketJson, $(".selClass").val(), goalDiv);
                 goalStat3.makeGoalTag(marketJson, $(".selClass").val(), goalDiv);
             }
+
             function changeClassData() {
                 stoneItem.changeClass($(".selClass").val());
                 engOpt.changeClass($(".selClass").val());
@@ -181,7 +182,7 @@
 
                 makeCurStatus(equipEng, equipStat, equipDebuff);
                 makeGoalStatus();
-                //makeGoalNeeds();
+                makeGoalNeeds();
             }
 
             function addEngData(mapObj, itemData) {
@@ -320,9 +321,7 @@
                 addGoalData(goalStat1, totalGoalStat);
                 addGoalData(goalStat2, totalGoalStat);
                 addGoalData(goalStat3, totalGoalStat);
-                debugger
             }
-
             function addGoalData(goalInfo, totalGoal){
                 if(goalInfo.activated)
                 {
@@ -339,7 +338,6 @@
                 }
             }
 
-
             function makeGoalNeeds(){                
                 var tableObj = document.createElement("table");
                 var engJson = marketJson.marketAuction.marketMenuAuctionEtcList[2].marketMenuEtcOptionSubList;
@@ -348,10 +346,10 @@
                 searchEngData = new Array();
                 for(item of engJson)
                 {
-                    if(goalEng[item.value])
+                    if(totalGoalEng[item.value])
                     {
-                        var statVal = statEng[item.value]!=null?Number(statEng[item.value]):0;
-                        if(statVal > Number(goalEng[item.value]))
+                        var statVal = equipEng[item.value]!=null?Number(equipEng[item.value]):0;
+                        if(statVal > Number(totalGoalEng[item.value]))
                         {
                             continue;
                         }
@@ -361,24 +359,24 @@
                         thObj.innerHTML = "각인" + num;
                         trObj.appendChild(thObj);
                         var tdObj = document.createElement("td");
-                        tdObj.innerHTML = item.text + " " + String(Number(goalEng[item.value]) - statVal);
-                        needEng[item.value] = Number(goalEng[item.value]) - statVal;
+                        tdObj.innerHTML = item.text + " " + String(Number(totalGoalEng[item.value]) - statVal);
+                        needEng[item.value] = Number(totalGoalEng[item.value]) - statVal;
                         searchEngData.push(item.value);
                         trObj.appendChild(tdObj);
                         tableObj.appendChild(trObj);
                     }
                 }
                 
-                var optJson = marketJson.marketAuction.marketMenuAuctionEtcList[1].marketMenuEtcOptionSubList;
+                var statJson = marketJson.marketAuction.marketMenuAuctionEtcList[1].marketMenuEtcOptionSubList;
                 num = 0;
-                needOpt = new Map();
-                searchOptData = new Array();
-                for(item of optJson)
+                needStat = new Map();
+                searchStatData = new Array();
+                for(item of statJson)
                 {
-                    if(goalOpt[item.value])
+                    if(totalGoalStat[item.value])
                     {
-                        var statVal = statOpt[item.value]!=null?Number(statOpt[item.value]):0;
-                        if(statVal > Number(goalOpt[item.value]))
+                        var statVal = equipStat[item.value]!=null?Number(equipStat[item.value]):0;
+                        if(statVal > Number(totalGoalStat[item.value]))
                         {
                             continue;
                         }
@@ -388,9 +386,9 @@
                         thObj.innerHTML = "특성" + num;
                         trObj.appendChild(thObj);
                         var tdObj = document.createElement("td");
-                        tdObj.innerHTML = item.text + " " + String(Number(goalOpt[item.value]) - statVal);
-                        needOpt[item.value] = Number(goalOpt[item.value]) - statVal;
-                        searchOptData.push(item.value);
+                        tdObj.innerHTML = item.text + " " + String(Number(totalGoalStat[item.value]) - statVal);
+                        needStat[item.value] = Number(totalGoalStat[item.value]) - statVal;
+                        searchStatData.push(item.value);
                         trObj.appendChild(tdObj);
                         tableObj.appendChild(trObj);
                     }
@@ -411,6 +409,22 @@
                 ringAuctionList.getAuctionData($("#suatCookie").val(), "200030", searchEngData, searchOptData, document.getElementById("auctionList"));
             }
 
+            //캐릭터 검색
+            function searchCharacterInfo()
+            {                
+                var searchData = {characterName : $("#characterName").val()};
+                $.ajax({
+                    url:"/SearchCharacterInfo",
+                    type:"post",
+                    datatype:"json",
+                    data: JSON.stringify(searchData),            
+                    contentType: "application/json; charset=utf-8;",
+                    success:function(data){
+                    	//marketJson = JSON.parse(data);
+                        //initStatusData();
+                    }
+                });
+            }
         </script>
     </head>
 
@@ -431,13 +445,16 @@
             2. 3티어<br>
             3. 유물장비
         </div>
+        <div style="border:1px solid black;width:450px;margin-bottom: 20px;padding:10px;">
+            <div>캐릭터 검색</div><input id="characterName" type="text" style="margin:5px;"/><input type="button" value="검색" onclick="searchCharacterInfo();"/>
+        </div>
         <div>장비 상태</div>
         <div>
             <span>클래스</span>
             <select class="selClass" onchange="changeClassData();">
             </select>
             <input type="button" value="계산" onclick="calcCurStatus();"/>
-            <input type="button" value="상점검색" onclick="searchMarket();"/>
+            <input type="button" value="상점검색(쿠키 필요)" onclick="searchMarket();"/>
         </div>
         <div>
             <div style="display:inline-block; vertical-align:top;width:calc(100% / 3)">
