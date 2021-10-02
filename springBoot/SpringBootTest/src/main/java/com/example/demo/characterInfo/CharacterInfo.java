@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -29,7 +30,7 @@ public class CharacterInfo {
 	EquipInfo ring2 = new EquipInfo();
 	
 	String itemJSONData = "";
-	public CharacterInfo(String reqUrl) throws IOException
+	public CharacterInfo(String reqUrl) throws Exception
 	{
 		Document doc = Jsoup.connect(reqUrl).get();
 		Elements scripts = doc.select("script");
@@ -37,15 +38,27 @@ public class CharacterInfo {
 		{
 			if(script.html().indexOf("$.Profile") >= 0)
 			{
-				itemJSONData = script.html();
-		        Pattern pattern = Pattern.compile("(\\{)[^]+(\\})");
+				itemJSONData = script.html();				
+				String regexStr ="(\\{)[^^]+(\\})";
+		        Pattern pattern = Pattern.compile(regexStr);
 		        Matcher matcher = pattern.matcher(itemJSONData);
-		        itemJSONData = matcher.group();
+				if(matcher.find())
+				{
+					itemJSONData = matcher.group();
+					JSONParser parser = new JSONParser();
+					Object obj = parser.parse(itemJSONData);
+					JSONObject userInfoJSON = (JSONObject) obj;
+					if(userInfoJSON.get("Engrave") != null)
+					{
+						JSONObject engInfo = (JSONObject)userInfoJSON.get("Engrave");
+						System.out.println(engInfo.toString());
+						for(int i = 0 ; i <  engInfo.size(); i++)
+						{
+							System.out.println(engInfo..toString());
+						}
 
-
-
-				
-				System.out.println("itemJSONData : " + itemJSONData);
+					}
+				}
 			}
 		}
 		
