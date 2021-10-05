@@ -234,9 +234,7 @@ var ItemInfo = function(itemType)
                     itemInfo.statVal[0] = event.target.value + event.key;
                     return true;
                 }
-                else{
-                    return false;
-                }
+                return false;
             }
             tdObject.appendChild(inputObj);
             trObject.appendChild(tdObject);
@@ -273,9 +271,7 @@ var ItemInfo = function(itemType)
                     itemInfo.statVal[1] = event.target.value + event.key;
                     return true;
                 }
-                else{
-                    return false;
-                }
+                return false;
             }
             tdObject.appendChild(inputObj);
             trObject.appendChild(tdObject);
@@ -350,8 +346,9 @@ var ItemInfo = function(itemType)
             tdObject.innerHTML = "장비명";
             trObject.appendChild(tdObject);
             var tdObject = document.createElement("td");
-            var selectObj = document.createElement("select");
-            tdObject.appendChild(selectObj);
+            var inputObj = document.createElement("input");
+            inputObj.readOnly = true;
+            tdObject.appendChild(inputObj);
             trObject.appendChild(tdObject);
             tableObject.appendChild(trObject);
         }

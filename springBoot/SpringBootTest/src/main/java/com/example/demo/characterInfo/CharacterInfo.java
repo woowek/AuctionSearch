@@ -19,17 +19,20 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class CharacterInfo {
-	class EquipInfo{
+	/*
+		String type = "";
 		String itemName = "";
 		String statInfo = "";
 		String engInfo = "";
 		String debuffInfo = "";
-	}
-	EquipInfo necklace = new EquipInfo(); 
-	EquipInfo earring1 = new EquipInfo();
-	EquipInfo earring2 = new EquipInfo();
-	EquipInfo ring1 = new EquipInfo();
-	EquipInfo ring2 = new EquipInfo();
+	*/
+	JSONObject engrave = new JSONObject(); 
+	JSONObject necklace = new JSONObject(); 
+	JSONObject earring1 = new JSONObject();
+	JSONObject earring2 = new JSONObject();
+	JSONObject ring1 = new JSONObject();
+	JSONObject ring2 = new JSONObject();
+	JSONObject stone = new JSONObject(); 
 	
 	String itemJSONData = "";
 	public CharacterInfo(String reqUrl) throws Exception
@@ -40,7 +43,7 @@ public class CharacterInfo {
 		{
 			if(script.html().indexOf("$.Profile") >= 0)
 			{
-				itemJSONData = script.html();				
+				itemJSONData = script.html();
 				String regexStr ="(\\{)[^^]+(\\})";
 		        Pattern pattern = Pattern.compile(regexStr);
 		        Matcher matcher = pattern.matcher(itemJSONData);
@@ -62,14 +65,19 @@ public class CharacterInfo {
 				    	String engName = "";
 				    	String engData = "";
 		    			JSONObject engSubInfo;
+		    			JSONArray engInsDataArr = new JSONArray();
 					    while(iter.hasNext()){
 					    	String keyStr = iter.next().toString();
 					    	engSubInfo = (JSONObject)engInfo.get(keyStr);
-					    	engName = (String)((JSONObject)engSubInfo.get("Element_000")).get("value");
-					    	engData = (String)((JSONObject)((JSONObject)engSubInfo.get("Element_001")).get("value")).get("leftText");
-							System.out.println(engName);
-							System.out.println(engData);
+					    	engName = removeTag((String)((JSONObject)engSubInfo.get("Element_000")).get("value"));
+					    	engData = removeTag((String)((JSONObject)((JSONObject)engSubInfo.get("Element_001")).get("value")).get("leftText"));
+							JSONObject engInsData = new JSONObject();
+							engInsData.put("engName", engName);
+							engInsData.put("engData", engData.substring(engData.indexOf("+") + 1));
+							engInsDataArr.add(engInsData);
 					    }
+					    engrave.put("data", engInsDataArr);
+						System.out.println(engrave.toString());
 					}
 					//Equip : 장비/보석(장신구만 추출 필요)
 					if(userInfoJSON.get("Equip") != null)
@@ -101,22 +109,36 @@ public class CharacterInfo {
 					    			//목걸이
 						    		case "006":
 						    			itemInfo = (JSONObject)equipInfo.get(keyStr);
-						    			itemName = (String)((JSONObject)itemInfo.get("Element_000")).get("value");
-						    			engInfo = (String)((JSONObject)((JSONObject)itemInfo.get("Element_006")).get("value")).get("Element_001");
-						    			statInfo = (String)((JSONObject)((JSONObject)itemInfo.get("Element_007")).get("value")).get("Element_001");
-										System.out.println(keyStr);
+						    			itemName = removeTag((String)((JSONObject)itemInfo.get("Element_000")).get("value"));
+						    			statInfo = removeTag((String)((JSONObject)((JSONObject)itemInfo.get("Element_006")).get("value")).get("Element_001"));
+						    			engInfo = removeTag((String)((JSONObject)((JSONObject)itemInfo.get("Element_007")).get("value")).get("Element_001"));
 										System.out.println(itemName);
-										System.out.println(engInfo);
 										System.out.println(statInfo);
+										System.out.println(engInfo);
+
+										JSONObject itemInsData = new JSONObject();
+										//정규식으로 정보 추출
+										//1. 각인/디버프
+										String regexStr2 ="(\\[)[^(\\])]+(\\])";
+										System.out.println(regexStr2);
+								        Pattern pattern2 = Pattern.compile(regexStr2);
+								        Matcher matcher2 = pattern2.matcher(engInfo);
+								        String engName = "";
+										while(matcher2.find()) {
+											engName = matcher2.group();
+											System.out.println(engName);
+										}
+										
+										
+										
 						    			break;
 					    			//귀걸이
 						    		case "007":
 						    		case "008":
 						    			itemInfo = (JSONObject)equipInfo.get(keyStr);
-						    			itemName = (String)((JSONObject)itemInfo.get("Element_000")).get("value");
-						    			engInfo = (String)((JSONObject)((JSONObject)itemInfo.get("Element_006")).get("value")).get("Element_001");
-						    			statInfo = (String)((JSONObject)((JSONObject)itemInfo.get("Element_007")).get("value")).get("Element_001");
-										System.out.println(keyStr);
+						    			itemName = removeTag((String)((JSONObject)itemInfo.get("Element_000")).get("value"));
+						    			statInfo = removeTag((String)((JSONObject)((JSONObject)itemInfo.get("Element_006")).get("value")).get("Element_001"));
+						    			engInfo = removeTag((String)((JSONObject)((JSONObject)itemInfo.get("Element_007")).get("value")).get("Element_001"));
 										System.out.println(itemName);
 										System.out.println(engInfo);
 										System.out.println(statInfo);				    			
@@ -125,10 +147,9 @@ public class CharacterInfo {
 						    		case "009":
 						    		case "010":
 						    			itemInfo = (JSONObject)equipInfo.get(keyStr);
-						    			itemName = (String)((JSONObject)itemInfo.get("Element_000")).get("value");
-						    			engInfo = (String)((JSONObject)((JSONObject)itemInfo.get("Element_006")).get("value")).get("Element_001");
-						    			statInfo = (String)((JSONObject)((JSONObject)itemInfo.get("Element_007")).get("value")).get("Element_001");
-										System.out.println(keyStr);
+						    			itemName = removeTag((String)((JSONObject)itemInfo.get("Element_000")).get("value"));
+						    			statInfo = removeTag((String)((JSONObject)((JSONObject)itemInfo.get("Element_006")).get("value")).get("Element_001"));
+						    			engInfo = removeTag((String)((JSONObject)((JSONObject)itemInfo.get("Element_007")).get("value")).get("Element_001"));
 										System.out.println(itemName);
 										System.out.println(engInfo);
 										System.out.println(statInfo);					    			
@@ -136,9 +157,8 @@ public class CharacterInfo {
 						    		//돌
 						    		case "011":
 						    			itemInfo = (JSONObject)equipInfo.get(keyStr);
-						    			itemName = (String)((JSONObject)itemInfo.get("Element_000")).get("value");
-						    			engInfo = (String)((JSONObject)((JSONObject)itemInfo.get("Element_005")).get("value")).get("Element_001");
-										System.out.println(keyStr);
+						    			itemName = removeTag((String)((JSONObject)itemInfo.get("Element_000")).get("value"));
+						    			engInfo = removeTag((String)((JSONObject)((JSONObject)itemInfo.get("Element_005")).get("value")).get("Element_001"));
 										System.out.println(itemName);
 										System.out.println(engInfo);
 						    			break;
@@ -152,4 +172,8 @@ public class CharacterInfo {
 		}
 		
 	}
+
+	private static String removeTag(String html) throws Exception {
+		return html.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+	}	
 }
