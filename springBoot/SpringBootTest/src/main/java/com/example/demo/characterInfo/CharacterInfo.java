@@ -44,7 +44,7 @@ public class CharacterInfo {
 			if(script.html().indexOf("$.Profile") >= 0)
 			{
 				itemJSONData = script.html();
-				String regexStr ="(\\{)[^^]+(\\})";
+				String regexStr ="\\{[^^]+\\}";
 		        Pattern pattern = Pattern.compile(regexStr);
 		        Matcher matcher = pattern.matcher(itemJSONData);
 				if(matcher.find())
@@ -73,10 +73,11 @@ public class CharacterInfo {
 					    	engData = removeTag((String)((JSONObject)((JSONObject)engSubInfo.get("Element_001")).get("value")).get("leftText"));
 							JSONObject engInsData = new JSONObject();
 							engInsData.put("engName", engName);
-							engInsData.put("engData", engData.substring(engData.indexOf("+") + 1));
+							engInsData.put("engVal", engData.substring(engData.indexOf("+") + 1));
 							engInsDataArr.add(engInsData);
 					    }
-					    engrave.put("data", engInsDataArr);
+					    engrave.put("type", "engrave");
+					    engrave.put("engData", engInsDataArr);
 						System.out.println(engrave.toString());
 					}
 					//Equip : 장비/보석(장신구만 추출 필요)
@@ -112,25 +113,67 @@ public class CharacterInfo {
 						    			itemName = removeTag((String)((JSONObject)itemInfo.get("Element_000")).get("value"));
 						    			statInfo = removeTag((String)((JSONObject)((JSONObject)itemInfo.get("Element_006")).get("value")).get("Element_001"));
 						    			engInfo = removeTag((String)((JSONObject)((JSONObject)itemInfo.get("Element_007")).get("value")).get("Element_001"));
-										System.out.println(itemName);
-										System.out.println(statInfo);
-										System.out.println(engInfo);
 
 										JSONObject itemInsData = new JSONObject();
 										//정규식으로 정보 추출
 										//1. 각인/디버프
-										String regexStr2 ="(\\[)[^(\\])]+(\\])";
-										System.out.println(regexStr2);
+										String regexStr2 ="\\[[^^\\]]+\\]";
 								        Pattern pattern2 = Pattern.compile(regexStr2);
 								        Matcher matcher2 = pattern2.matcher(engInfo);
-								        String engName = "";
+								        List<String> engNameArr = new ArrayList<String>();
 										while(matcher2.find()) {
-											engName = matcher2.group();
-											System.out.println(engName);
+											String engName = matcher2.group();
+											engName = engName.replace("[", "").replace("]", "");
+											engNameArr.add(engName);
+										}
+										String regexStr3 ="[0-9]+";
+								        Pattern pattern3 = Pattern.compile(regexStr3);
+								        Matcher matcher3 = pattern3.matcher(engInfo);
+								        List<String> engValArr = new ArrayList<String>();
+										while(matcher3.find()) {
+											String engVal = matcher3.group();
+											engValArr.add(engVal);
+										}										
+										JSONArray engInsDataArr = new JSONArray();
+										for(int i = 0 ; i < engNameArr.size(); i++)
+										{
+											JSONObject engInsData = new JSONObject();
+											engInsData.put("engName", engNameArr.get(i));
+											engInsData.put("engVal", engValArr.get(i));
+											engInsDataArr.add(engInsData);
 										}
 										
+										//특성추출
+										regexStr2 ="[가-힣]+";
+								        pattern2 = Pattern.compile(regexStr2);
+								        matcher2 = pattern2.matcher(statInfo);
+								        List<String> statNameArr = new ArrayList<String>();
+										while(matcher2.find()) {
+											String statName = matcher2.group();
+											statNameArr.add(statName);
+										}
+										regexStr3 ="[0-9]+";
+								        pattern3 = Pattern.compile(regexStr3);
+								        matcher3 = pattern3.matcher(statInfo);
+								        List<String> statValArr = new ArrayList<String>();
+										while(matcher3.find()) {
+											String statVal = matcher3.group();
+											statValArr.add(statVal);
+										}										
+										JSONArray statInsDataArr = new JSONArray();
+										for(int i = 0 ; i < statNameArr.size(); i++)
+										{
+											JSONObject statInsData = new JSONObject();
+											statInsData.put("statName", statNameArr.get(i));
+											statInsData.put("statVal", statValArr.get(i));
+											statInsDataArr.add(statInsData);
+										}
 										
-										
+									    necklace.put("type", "necklace");
+									    necklace.put("itemName", itemName);
+									    necklace.put("engData", engInsDataArr);
+									    necklace.put("statData", statInsDataArr);
+										System.out.println(necklace.toString());										
 						    			break;
 					    			//귀걸이
 						    		case "007":
