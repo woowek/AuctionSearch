@@ -72,6 +72,6 @@ public class GetAuctionDataController {
 		CharacterInfo characterInfo = new CharacterInfo(reqUrl);
 		response.setContentType("text/html; charset=UTF-8");
     	PrintWriter out = response.getWriter();
-    	out.print("");
+    	out.print(characterInfo.toJSON().toString());
 	}
 }
